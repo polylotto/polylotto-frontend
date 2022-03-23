@@ -1088,7 +1088,6 @@ contract Raffle is
         WAITING_FOR_REBOOT,
         OPEN,
         PAYOUT,
-        NULL,
         DEACTIVATED
     }
 
@@ -1626,10 +1625,11 @@ contract Raffle is
 
     function rollover(RaffleCategory _category) internal {
         RaffleStruct storage _raffle = raffles[_category][raffleID];
-
-        for (uint256 i; i < _raffle.noOfTicketsSold; i++) {
-            address player = _raffle.ticketOwner[i];
-            rollovers[_category][player] = _raffle.userTickets[player];
+        if (_raffle.noOfTicketsSold > 0) {
+            for (uint256 i; i < _raffle.noOfTicketsSold; i++) {
+                address player = _raffle.ticketOwner[i];
+                rollovers[_category][player] = _raffle.userTickets[player];
+            }
         }
         setRaffleState(_category, RaffleState.WAITING_FOR_REBOOT);
         rebootChecker++;
