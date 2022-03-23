@@ -59,7 +59,7 @@ const NavDropDown: React.FC<Props> = () =>{
                     <div className="nav-options">
                         <ul>
                             <li><a href={`https://mumbai.polygonscan.com/address/${account}`} target="_blank" rel="noopener noreferrer">Your Wallet</a></li>
-                            <li><a href="#" onClick={toggleTransactionHistory}>Recent Transactions</a></li>
+                            <li><a href="# " onClick={toggleTransactionHistory}>Recent Transactions</a></li>
                             <hr />
                             <li className="disconnect">
                                 <p>Disconnect</p>

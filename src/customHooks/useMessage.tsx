@@ -27,6 +27,7 @@ export function useMessage(){
 
     useEffect(()=> {
       handleMessage();
+      //eslint-disable-next-line
     }, [])
 
     return message

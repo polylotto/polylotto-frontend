@@ -57,6 +57,7 @@ export function useTimer(){
     useEffect(()=> {
         const timer = setInterval(workingTimer, 1000);
         return () => clearInterval(timer);
+        //eslint-disable-next-line
     }, [])
 
     const timer: timerProps ={
