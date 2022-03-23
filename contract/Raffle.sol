@@ -1245,7 +1245,6 @@ contract Raffle is
 
     // Function to be called by the chainlink keepers that start the raffle
     function startRaffle() internal stateCheck {
-        raffleID++;
         //initiating raffle
         currentRaffleStartTime = block.timestamp;
         currentRaffleEndTime = currentRaffleStartTime + raffleInterval;
@@ -1258,9 +1257,7 @@ contract Raffle is
             RaffleCategory.WHALE
         ];
         for (uint256 i = 0; i < categoryArray.length; i++) {
-            RaffleStruct storage _raffle = raffles[RaffleCategory.BASIC][
-                raffleID
-            ];
+            RaffleStruct storage _raffle = raffles[categoryArray[i]][raffleID];
             _raffle.ID = raffleID;
             _raffle.raffleStartTime = currentRaffleStartTime;
             _raffle.raffleEndTime = currentRaffleEndTime;
@@ -1268,6 +1265,7 @@ contract Raffle is
             setRaffleState(categoryArray[i], RaffleState.OPEN);
         }
         rebootChecker = 0;
+        raffleID++;
 
         emit RaffleOpen(
             raffleID,

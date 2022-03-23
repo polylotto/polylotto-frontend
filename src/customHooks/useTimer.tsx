@@ -12,9 +12,9 @@ export function useTimer(){
 
     const { state, updateRaffleOpen, deactivateRaffle } = useRaffleContext();
 
-    const _endTime = state.currentRaffleEndTime;
+    const _endTime = Number(state.currentRaffleEndTime);
 
-    const _rebootTime = state.currentRaffleRebootEndTime;
+    const _rebootTime = Number(state.currentRaffleRebootEndTime);
 
     const [hour, setHour] = useState(Number)
     const [minute, setMinute] = useState(Number);
@@ -22,8 +22,8 @@ export function useTimer(){
 
     const workingTimer = ()=>{
         let countDate;
-        const endTime = new Date(_endTime).getTime();
-        const rebootTime = new Date(_rebootTime).getTime(); 
+        const endTime = new Date(_endTime*1000).getTime();
+        const rebootTime = new Date(_rebootTime*1000).getTime(); 
         const now = new Date().getTime();
 
         if(now < endTime){

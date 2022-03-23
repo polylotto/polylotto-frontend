@@ -60,13 +60,14 @@ export async function get(
     const raffleCount = Number(raffleID);
     //looping through each category
     const raffleCategoryData: CategoryData[] = [];
-    for(let i=0;i<3;i++){
+    for(let i=0; i<3; i++){
         const raffles: RaffleData[] = [];
         for (let n = 1; n <=5; n++){
             const ID = raffleCount - n;
             if (ID < 0){
                 break;
             }
+            console.log(i,ID)
             const raffle = await raffleContract.methods.viewRaffle(i, ID).call();
             raffles.push({
                 raffleID,
