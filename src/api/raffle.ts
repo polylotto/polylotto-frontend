@@ -4,7 +4,7 @@ import Raffle from "../utils/Raffle.sol/Raffle.json";
 import IERC20 from "../utils/Raffle.sol/IERC20.json";
 import BN from "bn.js";
 
-const raffleContractAddress = "0xd4044863786EDB8c2780D88Fd1F66756E861B581";
+const raffleContractAddress = "0xbA5AC58b5afF135b9494eFF7691A069e4330b4b2";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
 
