@@ -1,0 +1,55 @@
+.transactions{
+    position: absolute;
+    top: 6rem;
+    right: 8rem;
+    height: 16.5rem;
+    overflow-y: scroll;
+    padding: 1rem 1rem 2rem 1rem;
+    background-color: rgb(236, 243, 230);
+    font-family: "PT sans","Roboto Mono",Arial, Helvetica, sans-serif;
+    border-collapse: separate;
+    color: var(--bg-color);
+    box-shadow: 4px 9px 18px #244d9449;
+}
+
+.transactions p{
+    margin-top: -1rem;
+    text-align: end;
+    padding-right: 1rem;
+    font-size: 2.5rem;
+}
+
+.transactions p span{
+    color: var(--bg-color);
+    cursor: pointer;
+}
+
+th {
+    font-size: 0.9rem;
+}
+td, th{
+    padding: 0.5rem;
+    color: var(--bg-color);
+}
+td{
+    color: var(--bg-color);
+}
+td a{
+    color: var(--main-color);
+    text-decoration: underline var(--main-color);
+}
+th{
+    text-transform: uppercase;
+}
+tr, tbody td{
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+    .transactions{
+        right: 0;
+        transform: translateX(-10%);
+        width: 25rem;
+        height: 20rem;
+    }
+}

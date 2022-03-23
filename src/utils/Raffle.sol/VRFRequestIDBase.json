@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "VRFRequestIDBase",
+  "sourceName": "contracts/Raffle.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212204b46b0000b0b83c1f9a89d75e85175a018601ac3d0df89e7becf3f493501abe064736f6c63430008040033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212204b46b0000b0b83c1f9a89d75e85175a018601ac3d0df89e7becf3f493501abe064736f6c63430008040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
