@@ -1257,7 +1257,8 @@ contract Raffle is
             RaffleCategory.WHALE
         ];
         for (uint256 i = 0; i < categoryArray.length; i++) {
-            RaffleStruct storage _raffle = raffles[categoryArray[i]][raffleID];
+            RaffleCategory _category = categoryArray[i];
+            RaffleStruct storage _raffle = raffles[_category][raffleID];
             _raffle.ID = raffleID;
             _raffle.raffleStartTime = currentRaffleStartTime;
             _raffle.raffleEndTime = currentRaffleEndTime;
