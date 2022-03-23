@@ -35,7 +35,7 @@ const TicketSection: React.FC<TicketProps> = ({
         <>
             <div className="ticket-section">
                 <div className="ticket-content">
-                {(state.currentRaffleState === "0") || state.deactivateRaffle? <CountdownDeactivated></CountdownDeactivated> : <CountdownTimer></CountdownTimer>}
+                {(state.currentRaffleState === "0" || "5") || state.deactivateRaffle? <CountdownDeactivated></CountdownDeactivated> : <CountdownTimer></CountdownTimer>}
                     <div className="ticket container">
                         <p className="ticket-type">{title} ${amount}</p>
                         <p className="randomizer"><span>Buy {title} Ticket(s)</span></p>

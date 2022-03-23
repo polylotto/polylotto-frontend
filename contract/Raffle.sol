@@ -1088,7 +1088,8 @@ contract Raffle is
         WAITING_FOR_REBOOT,
         OPEN,
         PAYOUT,
-        NULL
+        NULL,
+        DEACTIVATED
     }
 
     enum RaffleCategory {
@@ -1565,7 +1566,7 @@ contract Raffle is
                 upkeepNeeded = true;
                 performData = abi.encode(2, _category);
             } else if (
-                !(_raffleData.raffleState == RaffleState.INACTIVE) &&
+                !(_raffleData.raffleState == RaffleState.DEACTIVATED) &&
                 (block.timestamp > currentRaffleRebootEndTime) &&
                 (restart)
             ) {
@@ -1696,12 +1697,16 @@ contract Raffle is
         ];
         for (uint256 i = 0; i < categoryArray.length; i++) {
             RaffleCategory _category = categoryArray[i];
-            setRaffleState(_category, RaffleState.INACTIVE);
+            setRaffleState(_category, RaffleState.DEACTIVATED);
             rollover(_category);
         }
         rebootChecker = 0;
 
-        emit RaffleDeactivated(raffleID, block.timestamp, RaffleState.INACTIVE);
+        emit RaffleDeactivated(
+            raffleID,
+            block.timestamp,
+            RaffleState.DEACTIVATED
+        );
     }
 
     function reactivateRaffle()
