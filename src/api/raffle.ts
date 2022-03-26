@@ -4,7 +4,7 @@ import Raffle from "../utils/Raffle.sol/Raffle.json";
 import IERC20 from "../utils/Raffle.sol/IERC20.json";
 import BN from "bn.js";
 
-const raffleContractAddress = "0xbA5AC58b5afF135b9494eFF7691A069e4330b4b2";
+const raffleContractAddress = "0x5d7De55806883C7E5c5065daa09005fEEbc9950b";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
 
@@ -46,28 +46,28 @@ interface GetResponse {
 
 export async function get(
     account: string
-): Promise<GetResponse>{
+): Promise<GetResponse> {
     //@ts-ignore
-    const {ethereum} = window;
+    const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-        
+
     // Get Link Balance
     const contractLinkBalance = await raffleContract.methods.checkLinkBalance().call();
-        
+
     // Get current Raffle Data and Most Recent Raffle Data
     const raffleID = await raffleContract.methods.getCurrentRaffleID().call();
-    const raffleCount = Number(raffleID);
+    const raffleCount = Number(raffleID) + 1;
     //looping through each category
     const raffleCategoryData: CategoryData[] = [];
-    for(let i=0; i<3; i++){
+    for (let i = 0; i < 3; i++) {
         const raffles: RaffleData[] = [];
-        for (let n = 1; n <=5; n++){
+        for (let n = 1; n <= 5; n++) {
             const ID = raffleCount - n;
-            if (ID < 0){
+            if (ID <= 0) {
                 break;
             }
-            console.log(i,ID)
+            console.log(i, ID)
             const raffle = await raffleContract.methods.viewRaffle(i, ID).call();
             raffles.push({
                 raffleID,
@@ -90,14 +90,14 @@ export async function get(
     }
     const currentRaffle = raffleCategoryData[0].currentRaffle || undefined;
 
-    const currentRaffleEndTime = (currentRaffle !== undefined)? (currentRaffle.raffleEndTime).toString() : "0"
+    const currentRaffleEndTime = (currentRaffle !== undefined) ? (currentRaffle.raffleEndTime).toString() : "0"
 
     const _raffleState = raffleCategoryData[0].currentRaffleState || undefined;
 
-    const currentRaffleState = _raffleState? _raffleState.toString() : "0"
-    
+    const currentRaffleState = _raffleState ? _raffleState.toString() : "0"
+
     const currentRaffleRebootEndTime = await raffleContract.methods.getRebootEndTime().call();
-       
+
     // Get User Transaction History
     const transactionCount = await raffleContract.methods.getUserTransactionCount().call();
     // get 5 most recent tx
@@ -132,14 +132,14 @@ export async function buyTickets(
         raffleCategory: number;
         tickets: number[];
     }
-){
+) {
     //@ts-ignore
-    const {ethereum} = window;
+    const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
 
-    const { raffleCategory, tickets} = params;
-    
+    const { raffleCategory, tickets } = params;
+
     await raffleContract.methods.buyTicket(raffleCategory, tickets).send({
         from: account
     });
@@ -151,34 +151,34 @@ export async function approve(
         _amount: string;
         infiniteApproval: boolean;
     }
-){
+) {
     //@ts-ignore
-    const {ethereum} = window;
+    const { ethereum } = window;
     const web3 = new Web3(ethereum);
 
     const USDC = new web3.eth.Contract(
         IERC20ABI,
         USDCContractAddress
     );
-    const {_amount, infiniteApproval} = params;
-    
+    const { _amount, infiniteApproval } = params;
+
     let amountToApprove;
-    if(infiniteApproval){
+    if (infiniteApproval) {
         amountToApprove = new BN(79228162514.26);
-    }else{
-        amountToApprove = new BN(_amount) ;
+    } else {
+        amountToApprove = new BN(_amount);
     }
     amountToApprove = amountToApprove.mul(ERC20Decimals).toString();
     await USDC.methods.approve(raffleContractAddress, amountToApprove).send({
-        from:account
+        from: account
     });
 }
 
 export async function checkAllowance(
     account: string,
-){
+) {
     //@ts-ignore
-    const {ethereum} = window;
+    const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const USDC = new web3.eth.Contract(
         IERC20ABI,
@@ -187,9 +187,9 @@ export async function checkAllowance(
     const allowance = await USDC.methods.allowance(account, raffleContractAddress).call();
     const count = Number(allowance);
 
-    if(count === 0){
+    if (count === 0) {
         return (false);
-    }else{
+    } else {
         return (true);
     }
 }
@@ -199,24 +199,24 @@ export async function viewRollovers(
     params: {
         raffleCategory: number;
     }
-){
+) {
     //@ts-ignore
-    const {ethereum} = window;
+    const { ethereum } = window;
     const web3 = new Web3(ethereum);
-    const { raffleCategory } = params; 
+    const { raffleCategory } = params;
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-    const rollover =  await raffleContract.methods.viewRollovers(raffleCategory).call();
+    const rollover = await raffleContract.methods.viewRollovers(raffleCategory).call();
     return rollover;
-}  
+}
 
 export async function claimRollover(
     account: string,
     params: {
         raffleCategory: number;
     }
-){
+) {
     //@ts-ignore
-    const {ethereum} = window;
+    const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
     const { raffleCategory } = params;
@@ -227,17 +227,17 @@ export async function claimRollover(
 
 export async function recoverWrongTokens(
     account: string,
-    params:{
+    params: {
         tokenAddress: string;
     }
-){
+) {
     //@ts-ignore
-    const {ethereum} = window;
+    const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
 
     const { tokenAddress } = params;
-    
+
     await raffleContract.methods.recoverWrongTokens(tokenAddress).send({
         from: account
     });
@@ -249,12 +249,12 @@ export async function injectFunds(
         raffleCategory: number,
         amount: number
     }
-){
+) {
     //@ts-ignore
-    const {ethereum} = window;
+    const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-    const { raffleCategory, amount} = params;
+    const { raffleCategory, amount } = params;
     let amountToSend = new BN(amount);
     amountToSend = amountToSend.mul(ERC20Decimals);
     await raffleContract.methods.injectFunds(raffleCategory, amountToSend.toString()).send({
@@ -268,9 +268,9 @@ export async function setInjectorAndTreasuryAddresses(
         injectorAddress: string,
         treasuryAddress: string
     }
-){
+) {
     //@ts-ignore
-    const {ethereum} = window;
+    const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
     const { injectorAddress, treasuryAddress } = params;
@@ -284,17 +284,17 @@ export async function setInjectorAndTreasuryAddresses(
 
 //Set Events
 export function subscribe(
-   callback: (error: Error | null, log: Log | null) => void
-){
+    callback: (error: Error | null, log: Log | null) => void
+) {
     //@ts-ignore
-    const {ethereum} = window;
+    const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
 
-    const response = raffleContract.events.allEvents((error: Error, log: Log)=>{
-        if(error) {
+    const response = raffleContract.events.allEvents((error: Error, log: Log) => {
+        if (error) {
             callback(error, null);
-        }else if (log) {
+        } else if (log) {
             callback(null, log)
         }
     });
@@ -303,7 +303,7 @@ export function subscribe(
 
 }
 
-interface RaffleOpen{
+interface RaffleOpen {
     event: "RaffleOpen";
     returnValues: {
         raffleID: string;
@@ -313,7 +313,7 @@ interface RaffleOpen{
     };
 }
 
-interface TicketsPurchased{
+interface TicketsPurchased {
     event: "TicketsPurchased";
     returnValues: {
         raffleCategory: string;
@@ -324,7 +324,7 @@ interface TicketsPurchased{
     }
 }
 
-interface NewUserTransaction{
+interface NewUserTransaction {
     event: "NewUserTransaction";
     returnValues: {
         txIndex: number;
@@ -334,7 +334,7 @@ interface NewUserTransaction{
     }
 }
 
-interface RaffleEnded{
+interface RaffleEnded {
     event: "RaffleEnded";
     returnValues: {
         raffleCategory: string;
@@ -343,7 +343,7 @@ interface RaffleEnded{
     }
 }
 
-interface WinnersAwarded{
+interface WinnersAwarded {
     event: "WinnersAwarded";
     returnValues: {
         raffleCategory: string;
@@ -353,7 +353,7 @@ interface WinnersAwarded{
     }
 }
 
-interface RolloverClaimed{
+interface RolloverClaimed {
     event: "RolloverClaimed";
     returnValues: {
         raffleCategory: string;
@@ -363,7 +363,7 @@ interface RolloverClaimed{
     }
 }
 
-interface LotteryInjection{
+interface LotteryInjection {
     event: "LotteryInjection";
     returnValues: {
         raffleCategory: string;
@@ -372,7 +372,7 @@ interface LotteryInjection{
     }
 }
 
-interface NewTreasuryAndInjectorAddresses{
+interface NewTreasuryAndInjectorAddresses {
     event: "NewTreasuryAndInjectorAddresses";
     returnValues: {
         treasuryAddress: string;
@@ -380,7 +380,7 @@ interface NewTreasuryAndInjectorAddresses{
     }
 }
 
-interface AdminTokenRecovery{
+interface AdminTokenRecovery {
     event: "AdminTokenRecovery";
     returnValues: {
         raffleId: string;
@@ -389,7 +389,7 @@ interface AdminTokenRecovery{
     }
 }
 
-type Log = 
+type Log =
     | RaffleOpen
     | TicketsPurchased
     | NewUserTransaction

@@ -1061,9 +1061,9 @@ contract Raffle is
 
     //Raffle Address = 0x153480fEbAfc1C2890aDD521364FFD4C2128F4a2
 
-    uint256 public currentRaffleStartTime;
-    uint256 public currentRaffleEndTime;
-    uint256 public currentRaffleRebootEndTime;
+    uint256 internal currentRaffleStartTime;
+    uint256 internal currentRaffleEndTime;
+    uint256 internal currentRaffleRebootEndTime;
 
     uint256 public raffleID;
 
@@ -1142,6 +1142,7 @@ contract Raffle is
         require(msg.sender == tx.origin, "Proxy contract not allowed");
         _;
     }
+
     modifier onlyOwnerOrInjector() {
         require(
             (msg.sender == owner()) || (msg.sender == injectorAddress),
@@ -1149,10 +1150,12 @@ contract Raffle is
         );
         _;
     }
+
     modifier hasRollovers(RaffleCategory _category) {
         require(rollovers[_category][msg.sender] != 0, "You have no rollover");
         _;
     }
+
     modifier raffleNotValid(RaffleCategory _category) {
         RaffleStruct storage _raffle = raffles[_category][raffleID];
         require(
@@ -1161,6 +1164,7 @@ contract Raffle is
         );
         _;
     }
+
     modifier isRaffleDeactivated(RaffleCategory _category) {
         RaffleData storage _raffleData = rafflesData[_category];
         require(
@@ -1246,6 +1250,8 @@ contract Raffle is
     // Function to be called by the chainlink keepers that start the raffle
     function startRaffle() internal stateCheck {
         //initiating raffle
+        raffleID++;
+
         currentRaffleStartTime = block.timestamp;
         currentRaffleEndTime = currentRaffleStartTime + raffleInterval;
         currentRaffleRebootEndTime = currentRaffleEndTime + resetInterval;
@@ -1265,9 +1271,8 @@ contract Raffle is
 
             setRaffleState(categoryArray[i], RaffleState.OPEN);
         }
-        rebootChecker = 0;
-        raffleID++;
 
+        rebootChecker = 0;
         emit RaffleOpen(
             raffleID,
             currentRaffleEndTime,
@@ -1311,7 +1316,7 @@ contract Raffle is
         return (_raffleData.rafflePool);
     }
 
-    function getCurrentRaffleID() external view returns (uint256) {
+    function getraffleID() external view returns (uint256) {
         return raffleID;
     }
 
