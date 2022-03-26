@@ -12,13 +12,13 @@ export const CountdownTimer: React.FC<Props> =()=>{
     const { state } = useRaffleContext();
     if ((hour === 0 && minute === 0 && second === 0)){
         return (
-            <>  
-                <h4 className="center mt-5">Loading....</h4>
+            <>  <h4 className="center mt-5">Loading....</h4>
+                
                 <div className="countdown-timer">
                         <Time hour={0} minute={0} second={0} />
                 </div>
             </>
-        )
+        );
     }else{
         return (
             <>  
@@ -27,6 +27,6 @@ export const CountdownTimer: React.FC<Props> =()=>{
                         <Time hour={hour} minute={minute} second={second} />
                 </div>
             </>
-        )
+        );
     }
 }

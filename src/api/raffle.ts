@@ -56,7 +56,8 @@ export async function get(
     const contractLinkBalance = await raffleContract.methods.checkLinkBalance().call();
 
     // Get current Raffle Data and Most Recent Raffle Data
-    const raffleID = await raffleContract.methods.getCurrentRaffleID().call();
+    const raffleID = await raffleContract.methods.getraffleID().call();
+
     const raffleCount = Number(raffleID) + 1;
     //looping through each category
     const raffleCategoryData: CategoryData[] = [];
@@ -67,7 +68,6 @@ export async function get(
             if (ID <= 0) {
                 break;
             }
-            console.log(i, ID)
             const raffle = await raffleContract.methods.viewRaffle(i, ID).call();
             raffles.push({
                 raffleID,
@@ -78,6 +78,7 @@ export async function get(
                 raffleEndTime: raffle.raffleEndTime
             });
         }
+        console.log(raffles[0])
         const currentRaffleState = await raffleContract.methods.getCurrentRaffleState(i).call();
         const rafflePool = await raffleContract.methods.getRafflePool(i).call();
         raffleCategoryData.push({

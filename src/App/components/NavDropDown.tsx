@@ -11,7 +11,50 @@ import { useRaffleContext } from "../../context/raffle";
 
 interface Props {}
 
+interface RaffleData {
+    raffleID: number;
+    winners: string[];
+    noOfTicketSold: number;
+    winningTickets: string[];
+    raffleStartTime: string;
+    raffleEndTime: string;
+}
+
+interface CategoryData {
+    raffleCategory: Number;
+    rafflePool: string;
+    currentRaffleState: string;
+    currentRaffle: RaffleData;
+    mostRecentRaffles: RaffleData[];
+}
+
+interface Transaction {
+    txIndex: number;
+    timestamp: number;
+    raffleCategory: number;
+    noOfTickets: number;
+}
+
+interface SetInputs {
+    contractLinkBalance: string;
+    currentRaffleEndTime: string;
+    currentRaffleRebootEndTime: string;
+    currentRaffleState: string;
+    raffleCategoryData: CategoryData[];
+    userTransactions: Transaction[]
+}
+
 const NavDropDown: React.FC<Props> = () =>{
+
+    const INITIAL_STATE: SetInputs = {
+        contractLinkBalance: "0",
+        currentRaffleEndTime: "0",
+        currentRaffleRebootEndTime: "0",
+        currentRaffleState: "0",
+        raffleCategoryData: [],
+        userTransactions: []
+    }
+
     const {
         state: { account },
         updateAccount,
@@ -21,7 +64,7 @@ const NavDropDown: React.FC<Props> = () =>{
         updateConnection,
     } = useUserContext();
 
-    const { state } = useRaffleContext();
+    const { state, set } = useRaffleContext();
 
     const [navOptionsState, setNavOptionsState] = useState(false);
     const [transcState, setTranscState] = useState(false);
@@ -43,7 +86,8 @@ const NavDropDown: React.FC<Props> = () =>{
         //  is set to false. 
         setNavOptionsState(false);
         updateConnection({userConnected: false});
-        updateAccount({account: ""})
+        updateAccount({account: ""});
+        set(INITIAL_STATE);
     }
 
     return (

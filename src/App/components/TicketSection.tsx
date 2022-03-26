@@ -5,6 +5,10 @@ import { CountdownTimer } from "./CountDownTimer";
 import { CountdownDeactivated } from "./CountDownDeactivated";
 import background from "../images/SVGPolylogo.svg";
 import { useRaffleContext } from "../../context/raffle";
+import {useUserContext} from "../../context/user";
+import {useWeb3Context} from "../../context/web3";
+
+
 // import { OrderSummary } from "./OrderSummary2"
 
 interface TicketProps {
@@ -18,6 +22,8 @@ const TicketSection: React.FC<TicketProps> = ({
     amount,
     raffleCategory
 }) => {
+    const {state: userConnected} = useUserContext();
+    const {state: account} = useWeb3Context();
     const [onShow, setOnShow] = useState(false);
     const [numTicket, setNumTicket] = useState("");
     const {state} = useRaffleContext();
@@ -31,11 +37,12 @@ const TicketSection: React.FC<TicketProps> = ({
             setOnShow(true);
         }
     }
+    const nonActiveStates = ["0","5"];
     return(
         <>
             <div className="ticket-section">
                 <div className="ticket-content">
-                {(state.currentRaffleState === "0") || state.deactivateRaffle? <CountdownDeactivated></CountdownDeactivated> : <CountdownTimer></CountdownTimer>}
+                {(nonActiveStates.includes(state.currentRaffleState)) || state.deactivateRaffle? <CountdownDeactivated></CountdownDeactivated> : <CountdownTimer></CountdownTimer>}
                     <div className="ticket container">
                         <p className="ticket-type">{title} ${amount}</p>
                         <p className="randomizer"><span>Buy {title} Ticket(s)</span></p>
