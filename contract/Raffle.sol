@@ -1065,7 +1065,7 @@ contract Raffle is
     uint256 internal currentRaffleEndTime;
     uint256 internal currentRaffleRebootEndTime;
 
-    uint256 public raffleID;
+    uint256 internal raffleID;
 
     uint256 internal immutable raffleInterval = 1 * 1 hours;
     uint256 internal immutable resetInterval = 30 * 1 minutes;
@@ -1073,7 +1073,7 @@ contract Raffle is
     bytes32 internal keyHash;
     uint256 internal fee;
 
-    uint256 internal rebootChecker;
+    uint256 public rebootChecker;
 
     uint256 public noOfWinners = 3;
     uint256 public maxNumberTicketsPerBuy = 1000;
@@ -1168,8 +1168,8 @@ contract Raffle is
     modifier isRaffleDeactivated(RaffleCategory _category) {
         RaffleData storage _raffleData = rafflesData[_category];
         require(
-            _raffleData.raffleState == RaffleState.INACTIVE,
-            "Sorry can activate as raffle is active"
+            _raffleData.raffleState == RaffleState.DEACTIVATED,
+            "Sorry can activate as raffle is not deactivated"
         );
         _;
     }
@@ -1305,6 +1305,10 @@ contract Raffle is
 
     function getRebootEndTime() public view returns (uint256) {
         return (currentRaffleRebootEndTime);
+    }
+
+    function getRaffleEndTime() public view returns (uint256) {
+        return (currentRaffleEndTime);
     }
 
     function getRafflePool(RaffleCategory _category)
@@ -1541,6 +1545,7 @@ contract Raffle is
             RaffleCategory.INVESTOR,
             RaffleCategory.WHALE
         ];
+
         bool restart = false;
 
         if (rebootChecker == 3) {
@@ -1705,6 +1710,8 @@ contract Raffle is
             rollover(_category);
         }
         rebootChecker = 0;
+        currentRaffleEndTime = 0;
+        currentRaffleRebootEndTime = 0;
 
         emit RaffleDeactivated(
             raffleID,
@@ -1741,12 +1748,9 @@ contract Raffle is
     function withdrawFundsDueToDeactivation(RaffleCategory _category)
         external
         notContract
+        isRaffleDeactivated(_category)
         nonReentrant
     {
-        require(
-            rafflesData[_category].raffleState == RaffleState.INACTIVE,
-            "Raffle not Inactive"
-        );
         RaffleData storage _raffleData = rafflesData[_category];
         uint256 tickets = rollovers[_category][msg.sender];
         uint256 amount = tickets * _raffleData.ticketPrice;
