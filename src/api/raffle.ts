@@ -4,7 +4,7 @@ import Raffle from "../utils/Raffle.sol/Raffle.json";
 import IERC20 from "../utils/Raffle.sol/IERC20.json";
 import BN from "bn.js";
 
-const raffleContractAddress = "0x5d7De55806883C7E5c5065daa09005fEEbc9950b";
+const raffleContractAddress = "0x9061Cc59b6057C732B0399CE8AB63918C7B00dBe";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
 
@@ -89,9 +89,8 @@ export async function get(
             mostRecentRaffles: raffles
         })
     }
-    const currentRaffle = raffleCategoryData[0].currentRaffle || undefined;
 
-    const currentRaffleEndTime = (currentRaffle !== undefined) ? (currentRaffle.raffleEndTime).toString() : "0"
+    const currentRaffleEndTime = await raffleContract.methods.getRaffleEndTime().call();
 
     const _raffleState = raffleCategoryData[0].currentRaffleState || undefined;
 

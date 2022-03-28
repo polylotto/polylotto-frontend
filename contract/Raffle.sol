@@ -1560,19 +1560,28 @@ contract Raffle is
             RaffleData storage _raffleData = rafflesData[_category];
 
             if (
+                (_raffleData.raffleState == RaffleState.WAITING_FOR_REBOOT) &&
+                !restart
+            ) {
+                continue;
+            }
+
+            if (
                 ((block.timestamp > currentRaffleEndTime) &&
                     (_raffleData.raffleState == RaffleState.OPEN))
             ) {
                 if (_raffle.noOfTicketsSold < 10 && _raffle.noOfPlayers < 5) {
                     upkeepNeeded = true;
                     performData = abi.encode(4, _category);
-                    continue;
+                    break;
                 }
                 upkeepNeeded = true;
                 performData = abi.encode(1, _category);
+                break;
             } else if (_raffleData.raffleState == RaffleState.PAYOUT) {
                 upkeepNeeded = true;
                 performData = abi.encode(2, _category);
+                break;
             } else if (
                 !(_raffleData.raffleState == RaffleState.DEACTIVATED) &&
                 (block.timestamp > currentRaffleRebootEndTime) &&
@@ -1580,6 +1589,7 @@ contract Raffle is
             ) {
                 upkeepNeeded = true;
                 performData = abi.encode(3, _category);
+                break;
             }
         }
     }
