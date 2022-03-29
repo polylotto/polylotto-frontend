@@ -36,13 +36,14 @@ interface CategoryData {
 }
 interface GetResponse {
     contractLinkBalance: string;
-    currentRaffleEndTime: string;
-    currentRaffleRebootEndTime: string;
     currentRaffleState: string;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[]
 }
-
+interface CountDown {
+    currentRaffleEndTime: string;
+    currentRaffleRebootEndTime: string;
+}
 
 export async function get(
     account: string
@@ -89,13 +90,9 @@ export async function get(
         })
     }
 
-    const currentRaffleEndTime = await raffleContract.methods.getRaffleEndTime().call();
-
     const _raffleState = raffleCategoryData[0].currentRaffleState || undefined;
 
     const currentRaffleState = _raffleState ? _raffleState.toString() : "0"
-
-    const currentRaffleRebootEndTime = await raffleContract.methods.getRebootEndTime().call();
 
     // Get User Transaction History
     const transactionCount = await raffleContract.methods.getUserTransactionCount().call();
@@ -117,12 +114,26 @@ export async function get(
     }
     return {
         contractLinkBalance,
-        currentRaffleEndTime,
-        currentRaffleRebootEndTime,
         currentRaffleState,
         raffleCategoryData,
         userTransactions,
     };
+}
+
+export async function getCountDown(
+    account: string
+): Promise<CountDown> {
+    //@ts-ignore
+    const { ethereum } = window;
+    const web3 = new Web3(ethereum);
+    const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
+    const currentRaffleEndTime = await raffleContract.methods.getRaffleEndTime().call();
+    const currentRaffleRebootEndTime = await raffleContract.methods.getRebootEndTime().call();
+
+    return {
+        currentRaffleEndTime,
+        currentRaffleRebootEndTime
+    }
 }
 
 export async function buyTickets(

@@ -7,7 +7,7 @@ import React, {
 } from "react";
 
 import { useWeb3Context } from "./web3";
-import { get as getRaffle, subscribe} from "../api/raffle";
+import { get as getRaffle, getCountDown, subscribe} from "../api/raffle";
 
 interface State {
     contractLinkBalance: string;
@@ -56,6 +56,7 @@ const INITIAL_STATE: State = {
 }
 
 const SET = "SET";
+const SET_COUNTDOWN = "SET_COUNTDOWN";
 const ADD_USER_TX = "ADD_USER_TX";
 const RAFFLE_OPEN = "RAFFLE_OPEN";
 const RAFFLE_ENDED = "RAFFLE_ENDED";
@@ -66,11 +67,17 @@ interface Set {
     type: "SET";
     data: {
         contractLinkBalance: string;
-        currentRaffleEndTime: string;
-        currentRaffleRebootEndTime: string;
         currentRaffleState: string;
         raffleCategoryData: CategoryData[];
         userTransactions: Transaction[]
+    }
+}
+
+interface SetCountDown {
+    type: "SET_COUNTDOWN";
+    data: {
+        currentRaffleEndTime: string;
+        currentRaffleRebootEndTime: string;
     }
 }
 
@@ -113,7 +120,7 @@ interface DeactivateRaffle {
     deactivateRaffle: boolean;
 }
 
-type Action = Set | AddUserTx | RaffleOpen | RaffleEnded | UpdateRaffleOpen | DeactivateRaffle
+type Action = Set | SetCountDown | AddUserTx | RaffleOpen | RaffleEnded | UpdateRaffleOpen | DeactivateRaffle
 
 function reducer(state: State = INITIAL_STATE, action: Action) {
     switch (action.type) {
@@ -122,6 +129,12 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
                 ...state,
                 ...action.data,
             };
+        }
+        case SET_COUNTDOWN: {
+            return {
+                ...state,
+                ...action.data,
+            }
         }
         case ADD_USER_TX: {
             const {
@@ -189,11 +202,14 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
 
 interface SetInputs {
     contractLinkBalance: string;
-    currentRaffleEndTime: string;
-    currentRaffleRebootEndTime: string;
     currentRaffleState: string;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[]
+}
+
+interface SetCountDownInputs {
+    currentRaffleEndTime: string;
+    currentRaffleRebootEndTime: string;
 }
 
 interface AddUserTxInputs {
@@ -219,6 +235,7 @@ interface RaffleEndedInputs {
 const RaffleContext = createContext({
     state: INITIAL_STATE,
     set: (_data: SetInputs) => {},
+    setCountDown: (_data: SetCountDownInputs) => {},
     addUserTx: (_data: AddUserTxInputs) => {},
     raffleOpen: (_data: RaffleOpenInputs) => {},
     raffleEnded: (_data: RaffleEndedInputs) => {},
@@ -238,6 +255,13 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
     function set(data: SetInputs) {
         dispatch({
             type: SET,
+            data,
+        });
+    }
+
+    function setCountDown(data: SetCountDownInputs){
+        dispatch({
+            type: SET_COUNTDOWN,
             data,
         });
     }
@@ -281,6 +305,7 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
                 () => ({
                     state,
                     set,
+                    setCountDown,
                     addUserTx,
                     raffleOpen,
                     raffleEnded,
@@ -302,10 +327,27 @@ export function Updater() {
     const {
         state,
         set,
+        setCountDown,
         addUserTx,
         raffleEnded,
         raffleOpen,
     } = useRaffleContext()
+
+
+    useEffect(() => {
+        async function getCounter(account: string) {
+            try {
+                const data = await getCountDown(account);
+                setCountDown(data);
+            }catch(error){
+                console.error(error);
+            }
+        }
+
+        if(account) {
+            getCounter(account);
+        }
+    }, [account]);
 
     useEffect(() => {
         async function get(account: string) {
