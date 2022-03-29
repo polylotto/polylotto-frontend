@@ -34,11 +34,20 @@ const TicketSection: React.FC<TicketProps> = ({
         }
     }
     const nonActiveStates = ["0","5"];
+
+    function raffleCheck(){
+        if(nonActiveStates.includes(state.currentRaffleState) || state.deactivateRaffle){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
     return(
         <>
             <div className="ticket-section">
                 <div className="ticket-content">
-                {(nonActiveStates.includes(state.currentRaffleState)) || state.deactivateRaffle? <CountdownDeactivated></CountdownDeactivated> : <CountdownTimer></CountdownTimer>}
+                {(raffleCheck())? <CountdownDeactivated></CountdownDeactivated> : <CountdownTimer></CountdownTimer>}
                     <div className="ticket container">
                         <p className="ticket-type">{title} ${amount}</p>
                         <p className="randomizer"><span>Buy {title} Ticket(s)</span></p>
@@ -52,7 +61,7 @@ const TicketSection: React.FC<TicketProps> = ({
                                     value={numTicket}
                                     onChange={onChange}
                                 />
-                                <Button className={"btn"}>
+                                <Button className={"btn"} disabled={raffleCheck()}>
                                     Get Ticket
                                 </Button>
                             </Form.Group>
