@@ -6,7 +6,7 @@ const ComingSoon = ()=>{
                 <p>This Feature is Coming Soon.</p>
             </div>
         </>
-    )
+    );
 }
 
 export default ComingSoon;

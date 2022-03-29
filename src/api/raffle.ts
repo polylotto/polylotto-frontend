@@ -63,7 +63,7 @@ export async function get(
     const raffleCategoryData: CategoryData[] = [];
     for (let i = 0; i < 3; i++) {
         const raffles: RaffleData[] = [];
-        for (let n = 1; n <= 5; n++) {
+        for (let n = 1; n <= 3; n++) {
             const ID = raffleCount - n;
             if (ID <= 0) {
                 break;
@@ -78,7 +78,6 @@ export async function get(
                 raffleEndTime: raffle.raffleEndTime
             });
         }
-        console.log(raffles[0])
         const currentRaffleState = await raffleContract.methods.getCurrentRaffleState(i).call();
         const rafflePool = await raffleContract.methods.getRafflePool(i).call();
         raffleCategoryData.push({
@@ -123,7 +122,7 @@ export async function get(
         currentRaffleState,
         raffleCategoryData,
         userTransactions,
-    }
+    };
 }
 
 export async function buyTickets(

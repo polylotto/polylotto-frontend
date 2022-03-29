@@ -23,7 +23,7 @@ function getLocalStorage(){
     }else if(localState === 'false'){
         return false;
     }else{
-        return null
+        return null;
     }
 }
 

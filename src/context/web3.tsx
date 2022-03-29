@@ -24,7 +24,7 @@ const LOCAL_STATE: State = {
 function getLocalStorage(){
   const _localState= localStorage.getItem("account");
   const localState : string = _localState !== null? JSON.parse(_localState) : "";
-  return localState
+  return localState;
 }
 
 const UPDATE_ACCOUNT = "UPDATE_ACCOUNT";

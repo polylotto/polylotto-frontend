@@ -66,7 +66,7 @@ const MainNav: React.FC<Props> = () =>{
             </ul>
 
         </>
-    )
+    );
 }
 
 export default MainNav;

@@ -110,7 +110,7 @@ export const OrderSummary: React.FC<Props> = ({type, amount, raffleCategory, num
           <div className="flex"><h4>Total Amount</h4><h4>${amount*numOfTickets}</h4></div>
         </div>
           <>
-          <div className="mt-5"><Button className="btn" onClick={handlePay}>{message}</Button></div>
+          <div className="mt-5"><Button className="btn" onClick={handlePay}>{useMessage()}</Button></div>
           </>
       </StyledModal>
       </div>, document.querySelector("body")!

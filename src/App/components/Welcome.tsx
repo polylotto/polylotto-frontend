@@ -15,7 +15,7 @@ const WelcomeContent = () => {
                 </div>
             </section>
         </div>
-    )
+    );
 }
 
 export default WelcomeContent;

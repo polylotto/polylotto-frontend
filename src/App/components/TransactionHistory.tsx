@@ -46,7 +46,7 @@ const TranscHistory: React.FC<Props> = ({
                     </tbody>
             </table>
         </div>, document.querySelector("body")!
-    )
+    );
 }
 
 export default TranscHistory;

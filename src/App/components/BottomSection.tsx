@@ -7,7 +7,7 @@ const BottomSection = () => {
                 <Cards />
             </div>
         </div>
-    )
+    );
 }
 
 export default BottomSection;

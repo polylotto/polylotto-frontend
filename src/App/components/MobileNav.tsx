@@ -13,7 +13,7 @@ const MobileNav: React.FC<Props> = ({display})  => {
             <li><a href="/coming" className="btn">$Buy Token</a></li>
             <li><a href="/#play" className="btn">Play Now</a></li>
         </ul>
-    )
+    );
 }
 
 export default MobileNav;

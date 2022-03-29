@@ -30,5 +30,5 @@ export function useMessage(){
       //eslint-disable-next-line
     }, [])
 
-    return message
+    return message;
 }

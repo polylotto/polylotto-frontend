@@ -11,7 +11,7 @@ const Header: React.FC<Props> = () => {
             </div>
             <MainNav />
         </header>
-    )
+    );
 }
 
 export default Header;

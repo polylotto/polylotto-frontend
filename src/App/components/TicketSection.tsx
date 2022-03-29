@@ -5,9 +5,6 @@ import { CountdownTimer } from "./CountDownTimer";
 import { CountdownDeactivated } from "./CountDownDeactivated";
 import background from "../images/SVGPolylogo.svg";
 import { useRaffleContext } from "../../context/raffle";
-import {useUserContext} from "../../context/user";
-import {useWeb3Context} from "../../context/web3";
-
 
 // import { OrderSummary } from "./OrderSummary2"
 
@@ -22,8 +19,7 @@ const TicketSection: React.FC<TicketProps> = ({
     amount,
     raffleCategory
 }) => {
-    const {state: userConnected} = useUserContext();
-    const {state: account} = useWeb3Context();
+    
     const [onShow, setOnShow] = useState(false);
     const [numTicket, setNumTicket] = useState("");
     const {state} = useRaffleContext();
@@ -56,7 +52,7 @@ const TicketSection: React.FC<TicketProps> = ({
                                     value={numTicket}
                                     onChange={onChange}
                                 />
-                                <Button className={"btn"} disabled={!(state.raffleOpen)}>
+                                <Button className={"btn"}>
                                     Get Ticket
                                 </Button>
                             </Form.Group>
@@ -70,6 +66,6 @@ const TicketSection: React.FC<TicketProps> = ({
             </div>
             
         </>
-    )
+    );
 }
 export default TicketSection;

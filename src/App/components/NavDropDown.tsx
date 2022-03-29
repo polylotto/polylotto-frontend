@@ -118,7 +118,7 @@ const NavDropDown: React.FC<Props> = () =>{
                 transcState ? <TranscHistory data={state.userTransactions} setTranscState={setTranscState}/> : <></>
             }
         </>
-    )
+    );
 }
 
 export default NavDropDown;

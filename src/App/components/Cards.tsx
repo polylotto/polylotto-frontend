@@ -34,7 +34,7 @@ const Cards = () => {
                 link = "/whale"
             />
         </div>
-    )
+    );
 }
 
 export default Cards;

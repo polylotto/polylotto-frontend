@@ -52,7 +52,7 @@ function useAsync<Params, Response>(
         error,
       }))
 
-      return { error}
+      return { error };
     }
 }
   return {

@@ -26,7 +26,7 @@ const Card: React.FC<cardProps> = ({
             <p>{title}</p>
             <a href={link} className="play btn">Play</a>
         </div>
-    )
+    );
 }
 
 export default Card;

@@ -18,6 +18,7 @@ interface State {
     userTransactions: Transaction[];
     raffleOpen: boolean;
     deactivateRaffle: boolean;
+    raffleStateMessage: string;
 }
 
 interface Transaction {
@@ -51,6 +52,7 @@ const INITIAL_STATE: State = {
     userTransactions: [],
     raffleOpen: false,
     deactivateRaffle: false,
+    raffleStateMessage: "",
 }
 
 const SET = "SET";
@@ -119,7 +121,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
             return {
                 ...state,
                 ...action.data,
-            }
+            };
         }
         case ADD_USER_TX: {
             const {
@@ -139,7 +141,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
             return {
                 ...state,
                 userTransactions,
-            }
+            };
         }
 
         case RAFFLE_OPEN: {
@@ -151,7 +153,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
                 currentRaffleEndTime: endTime,
                 currentRaffleRebootEndTime: rebootTime,
                 currentRaffleState: raffleState,
-            }
+            };
         }
 
         case RAFFLE_ENDED: {
@@ -161,7 +163,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
             return {
                 ...state,
                 currentRaffleState: raffleState,
-            }
+            };
         }
 
         case UPDATE_RAFFLE_OPEN: {
@@ -169,7 +171,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
             return {
                 ...state,
                 raffleOpen,
-            }
+            };
         }
 
         case DEACTIVATE_RAFFLE: {
@@ -177,7 +179,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
             return {
                 ...state,
                 deactivateRaffle
-            }
+            };
         }
 
         default:

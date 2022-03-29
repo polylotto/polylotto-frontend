@@ -23,5 +23,5 @@ export const TransactionDetails: React.FC<Props> = ({
             <td>{raffleCategory}</td>
             <td>{noOfTickets}</td>
         </tr>
-    )
+    );
 }

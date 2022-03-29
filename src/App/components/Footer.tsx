@@ -39,5 +39,5 @@ export const Footer = ()=>{
                 <a href="/coming" className="btn-3">Buy Token &#8594;</a>
             </div>
         </footer>
-    )
+    );
 }

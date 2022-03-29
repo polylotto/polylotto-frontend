@@ -25,6 +25,6 @@ export const Time: React.FC<timeProps> = ({hour, minute, second})=> {
                 <small>Sec</small>
             </div>
         </React.Fragment>
-    )
+    );
 
 }
