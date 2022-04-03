@@ -13,11 +13,14 @@ interface Props {}
 
 interface RaffleData {
     raffleID: number;
-    winners: string[];
     noOfTicketSold: number;
+    noOfPlayers: string;
+    winners: string[];
     winningTickets: string[];
+    winnersPayout: string[];
     raffleStartTime: string;
     raffleEndTime: string;
+    amountInjected: string;
 }
 
 interface CategoryData {

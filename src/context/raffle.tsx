@@ -29,11 +29,14 @@ interface Transaction {
 }
 interface RaffleData {
     raffleID: number;
-    winners: string[];
     noOfTicketSold: number;
+    noOfPlayers: string;
+    winners: string[];
     winningTickets: string[];
+    winnersPayout: string[];
     raffleStartTime: string;
     raffleEndTime: string;
+    amountInjected: string;
 }
 interface CategoryData {
     raffleCategory: Number;

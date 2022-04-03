@@ -6,7 +6,7 @@ export async function connectWalletMetamask() {
     //@ts-ignore
     const { ethereum } = window;
 
-    if (!ethereum){
+    if (!ethereum) {
         toast.warn("Make sure you have MetaMask Connected", {
             position: "top-right",
             autoClose: 5000,
@@ -31,23 +31,23 @@ export async function connectWalletMetamask() {
     // await ethereum.enable();
     // const accounts = await web3.eth.getAccounts();
 
-    return{account: accounts[0] || ""};
+    return { account: accounts[0] || "" };
 }
 
 export function subscribeToAccount(
-    callback: (error: Error | null, account: string | null) => any
-){
+    callback: (error: Error | null, account: string | "") => any
+) {
     const id = setInterval(async () => {
         try {
-             // @ts-ignore
+            // @ts-ignore
             const { ethereum } = window;
             const accounts = await ethereum.request({
                 method: "eth_requestAccounts",
-            }); 
+            });
             callback(null, accounts[0])
-        }catch (e) {
+        } catch (e) {
             const error = e as Error;
-            callback(error, null)
+            callback(error, "")
         }
     }, 1000);
 

@@ -3,9 +3,7 @@ import React, {Dispatch, SetStateAction, useState} from "react";
 import reactDom from "react-dom";
 import { useWeb3Context } from "../../context/web3";
 import { Button } from "semantic-ui-react";
-import { connectWalletMetamask } from "../../api/web3"; 
 import useAsync from "../../async/useAsync";
-import { useUserContext } from "../../context/user";
 import * as raffle from "../../api/raffle";
 import { useMessage } from "../../customHooks/useMessage";
 import { generateRandomTickets } from "../../api/randomNumber";
@@ -24,20 +22,15 @@ interface Props {
 export const OrderSummary: React.FC<Props> = ({type, amount, raffleCategory, numOfTickets, setOnShow, isVisible }) =>{
 
   const [checked, setChecked] = useState(false);
- 
-  const { updateConnection } = useUserContext();
+
 
   const onCheck = ()=>{
     checked ? setChecked(false) : setChecked(true)
   }
 
-  const { state: { account }, updateAccount, } = useWeb3Context();
+  const { state: { account } } = useWeb3Context();
 
   const message = useMessage();
-
-  //eslint-disable-next-line
-  const { pending, error, call } = useAsync(connectWalletMetamask);
-
 
   const approve = useAsync(async () => {
     if(!account){
@@ -54,19 +47,9 @@ export const OrderSummary: React.FC<Props> = ({type, amount, raffleCategory, num
       throw new Error("Not connected");
     }
     const tickets = generateRandomTickets(numOfTickets);
-    await raffle.buyTickets(account, {raffleCategory, tickets })
+    await raffle.buyTickets(account, {raffleCategory, tickets})
   })
 
-  async function onClickConnect() {
-    const { error, data } = await call(null);
-    if (error) {
-      console.error(error);
-    }
-    if(data) {
-      updateAccount(data);
-      updateConnection({userConnected:true})
-    }
-  }
 
   const handleModalHide = ()=>{
     setOnShow(false);
@@ -75,10 +58,7 @@ export const OrderSummary: React.FC<Props> = ({type, amount, raffleCategory, num
   }
 
   const handlePay = () => {
-    if(message === "Connect Wallet"){
-      handleModalHide();
-      onClickConnect();
-    } else if(message === "Approve"){
+    if(message === "Approve"){
       handleModalHide();
       approve.call(null);
     } else if(message === "Pay Now"){

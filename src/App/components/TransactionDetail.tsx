@@ -16,12 +16,12 @@ export const TransactionDetails: React.FC<Props> = ({
     const time = timestamp;
     const date = timestamp;
     return (
-        <tr>
+        <>
             <td>{txIndex}</td>
             <td>{time}</td>
             <td>{date}</td>
             <td>{raffleCategory}</td>
             <td>{noOfTickets}</td>
-        </tr>
+        </>
     );
 }

@@ -4,7 +4,7 @@ import Raffle from "../utils/Raffle.sol/Raffle.json";
 import IERC20 from "../utils/Raffle.sol/IERC20.json";
 import BN from "bn.js";
 
-const raffleContractAddress = "0x9061Cc59b6057C732B0399CE8AB63918C7B00dBe";
+const raffleContractAddress = "0xeb7Fe83Fb2AdE1a72D286ea6947B5463065d5525";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
 
@@ -21,11 +21,14 @@ interface Transaction {
 }
 interface RaffleData {
     raffleID: number;
-    winners: string[];
     noOfTicketSold: number;
+    noOfPlayers: string;
+    winners: string[];
     winningTickets: string[];
+    winnersPayout: string[];
     raffleStartTime: string;
     raffleEndTime: string;
+    amountInjected: string;
 }
 interface CategoryData {
     raffleCategory: Number;
@@ -71,12 +74,15 @@ export async function get(
             }
             const raffle = await raffleContract.methods.viewRaffle(i, ID).call();
             raffles.push({
-                raffleID,
+                raffleID: raffle.ID,
+                noOfTicketSold: raffle.noOfTicketSold,
+                noOfPlayers: raffle.noOfPlayers,
                 winners: raffle.winners,
-                noOfTicketSold: raffle.noOfTickets,
                 winningTickets: raffle.winningTickets,
+                winnersPayout: raffle.winnersPayout,
                 raffleStartTime: raffle.raffleStartTime,
-                raffleEndTime: raffle.raffleEndTime
+                raffleEndTime: raffle.raffleEndTime,
+                amountInjected: raffle.amountInjected
             });
         }
         const currentRaffleState = await raffleContract.methods.getCurrentRaffleState(i).call();
@@ -95,7 +101,7 @@ export async function get(
     const currentRaffleState = _raffleState ? _raffleState.toString() : "0"
 
     // Get User Transaction History
-    const transactionCount = await raffleContract.methods.getUserTransactionCount().call();
+    const transactionCount = await raffleContract.methods.getUserTransactionCount(account).call();
     // get 5 most recent tx
     const count = Number(transactionCount)
     const userTransactions: Transaction[] = [];
@@ -104,19 +110,20 @@ export async function get(
         if (txIndex < 0) {
             break;
         }
-        const tx = await raffleContract.methods.getUserTransactionHistory(txIndex).call();
+        const tx = await raffleContract.methods.getUserTransactionHistory(account, txIndex).call();
+        console.log(tx);
         userTransactions.push({
-            txIndex,
-            timestamp: tx.timestamp,
+            txIndex: tx.txID,
+            timestamp: tx.time,
             raffleCategory: tx.raffleCategory,
             noOfTickets: tx.noOfTickets
         });
     }
     return {
-        contractLinkBalance,
-        currentRaffleState,
-        raffleCategoryData,
-        userTransactions,
+        contractLinkBalance: contractLinkBalance,
+        currentRaffleState: currentRaffleState,
+        raffleCategoryData: raffleCategoryData,
+        userTransactions: userTransactions,
     };
 }
 
@@ -147,8 +154,9 @@ export async function buyTickets(
     const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-
     const { raffleCategory, tickets } = params;
+
+    console.log(tickets)
 
     await raffleContract.methods.buyTicket(raffleCategory, tickets).send({
         from: account
@@ -215,7 +223,7 @@ export async function viewRollovers(
     const web3 = new Web3(ethereum);
     const { raffleCategory } = params;
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-    const rollover = await raffleContract.methods.viewRollovers(raffleCategory).call();
+    const rollover = await raffleContract.methods.viewUserRollovers(raffleCategory, account).call();
     return rollover;
 }
 
@@ -223,14 +231,16 @@ export async function claimRollover(
     account: string,
     params: {
         raffleCategory: number;
+        ticketsToRollover: number;
+        tickets: number[];
     }
 ) {
     //@ts-ignore
     const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-    const { raffleCategory } = params;
-    await raffleContract.methods.claimRollover(raffleCategory).send({
+    const { raffleCategory, ticketsToRollover, tickets } = params;
+    await raffleContract.methods.claimRollover(raffleCategory, ticketsToRollover, tickets).send({
         from: account
     });
 }
@@ -291,6 +301,54 @@ export async function setInjectorAndTreasuryAddresses(
         from: account
     });
 }
+
+export async function deactivateRaffle(
+    account: string
+) {
+    //@ts-ignore
+    const { ethereum } = window;
+    const web3 = new Web3(ethereum);
+    const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
+
+    await raffleContract.methods.deactivateRaffle().send({
+        from: account
+    });
+}
+
+export async function reactivateRaffle(
+    account: string
+) {
+
+    //@ts-ignore
+    const { ethereum } = window;
+    const web3 = new Web3(ethereum);
+    const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
+
+    await raffleContract.methods.reactivateRaffle().send({
+        from: account
+    });
+
+
+}
+
+export async function withdrawFundsDueToDeactivation(
+    account: string,
+    params: {
+        raffleCategory: number
+    }
+) {
+    //@ts-ignore
+    const { ethereum } = window;
+    const web3 = new Web3(ethereum);
+    const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
+    const { raffleCategory } = params;
+
+    await raffleContract.methods.withdrawFundsDueToDeactivation(raffleCategory).send({
+        from: account
+    })
+}
+
+
 
 //Set Events
 export function subscribe(
@@ -399,6 +457,35 @@ interface AdminTokenRecovery {
     }
 }
 
+interface RaffleDeactivated {
+    event: "RaffleDeactivated";
+    returnValues: {
+        raffleID: string;
+        timeStamp: string;
+        raffleState: string;
+    }
+
+}
+
+interface RaffleReactivated {
+    event: "RaffleReactivated";
+    returnValues: {
+        raffleID: string;
+        timeStamp: string;
+        raffleState: string;
+    }
+}
+
+interface WithdrawalComplete {
+    event: "WithdrawalComplete";
+    returnValues: {
+        raffleID: string;
+        amount: string;
+    }
+}
+
+
+
 type Log =
     | RaffleOpen
     | TicketsPurchased
@@ -408,7 +495,10 @@ type Log =
     | RolloverClaimed
     | LotteryInjection
     | NewTreasuryAndInjectorAddresses
-    | AdminTokenRecovery;
+    | AdminTokenRecovery
+    | RaffleDeactivated
+    | RaffleReactivated
+    | WithdrawalComplete;
 
 
 //Current Code flow

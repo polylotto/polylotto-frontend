@@ -1059,15 +1059,14 @@ contract Raffle is
 {
     using SafeERC20 for IERC20;
 
-    //Raffle Address = 0x153480fEbAfc1C2890aDD521364FFD4C2128F4a2
-
     uint256 internal currentRaffleStartTime;
     uint256 internal currentRaffleEndTime;
     uint256 internal currentRaffleRebootEndTime;
 
     uint256 internal raffleID;
+    uint256 public currentTicketID;
 
-    uint256 internal immutable raffleInterval = 1 * 1 hours;
+    uint256 internal immutable raffleInterval = 2 * 1 hours;
     uint256 internal immutable resetInterval = 30 * 1 minutes;
 
     bytes32 internal keyHash;
@@ -1099,20 +1098,18 @@ contract Raffle is
 
     struct RaffleStruct {
         uint256 ID; //Raffle ID
-        address[] winners; // Winner address
-        uint256[] tickets; // tickets id (tickets)
         uint256 noOfTicketsSold; // Tickets sold
-        uint256[] winnersPayout; // Contains the % payouts of the winners
-        uint256[] winningTickets; // Contains array of winning Tickets
         uint256 noOfPlayers;
         uint256 amountInjected;
+        uint256[] winnersPayout; // Contains the % payouts of the winners
+        address[] winners;
+        uint256[] winningTickets; // Contains array of winning Tickets
         uint256 raffleStartTime;
         uint256 raffleEndTime;
-        mapping(uint256 => address) ticketOwner; //a mapping that maps the tickets to their owners
-        mapping(address => uint256) userTickets; // a mapping that stores the number of tickets bought by a user
     }
 
     struct Transaction {
+        uint256 txID;
         uint256 time;
         RaffleCategory raffleCategory;
         uint256 noOfTickets;
@@ -1124,13 +1121,31 @@ contract Raffle is
         RaffleState raffleState;
     }
 
+    struct Ticket {
+        uint32 ticketNumber;
+        address owner;
+    }
+
+    //Maps Total ticket Record for raffle
+    mapping(RaffleCategory => mapping(uint256 => Ticket)) private ticketsRecord;
+
+    //Mapping for user tickets history
+    mapping(address => mapping(RaffleCategory => mapping(uint256 => uint32[])))
+        private userTicketsPerRaffle;
+
     //Maps Raffle category to each Raffle indexes of each Raffle, for record keeping.
     mapping(RaffleCategory => mapping(uint256 => RaffleStruct)) private raffles;
+
+    //Map General Raffle Data
     mapping(RaffleCategory => RaffleData) private rafflesData;
+
+    //Help keep track of return value from vrf
     mapping(bytes32 => RaffleCategory) private bytesCategoryMapping;
-    //Mapping for users that qualify for r
+
+    //Mapping for users that qualify for rollovers and the number of tickets to rollover
     mapping(RaffleCategory => mapping(address => uint256)) private rollovers;
-    // Users Transaction History
+
+    //Users Transaction History
     mapping(address => Transaction[]) private userTransactionHistory;
 
     modifier stateCheck() {
@@ -1159,7 +1174,7 @@ contract Raffle is
     modifier raffleNotValid(RaffleCategory _category) {
         RaffleStruct storage _raffle = raffles[_category][raffleID];
         require(
-            _raffle.noOfTicketsSold < 10 && _raffle.noOfPlayers < 5,
+            _raffle.noOfTicketsSold < 10 || _raffle.noOfPlayers < 5,
             "Sorry can not deactivate a valid raffle"
         );
         _;
@@ -1303,11 +1318,11 @@ contract Raffle is
         _raffleData.raffleState = _state;
     }
 
-    function getRebootEndTime() public view returns (uint256) {
+    function getRebootEndTime() external view returns (uint256) {
         return (currentRaffleRebootEndTime);
     }
 
-    function getRaffleEndTime() public view returns (uint256) {
+    function getRaffleEndTime() external view returns (uint256) {
         return (currentRaffleEndTime);
     }
 
@@ -1336,25 +1351,12 @@ contract Raffle is
     function viewRaffle(RaffleCategory _category, uint256 _raffleID)
         external
         view
-        returns (
-            address[] memory winners,
-            uint256 noOfTicketsSold,
-            uint256[] memory winningTickets,
-            uint256 raffleStartTime,
-            uint256 raffleEndTime
-        )
+        returns (RaffleStruct memory raffle)
     {
-        RaffleStruct storage _raffle = raffles[_category][_raffleID];
-        return (
-            _raffle.winners,
-            _raffle.noOfTicketsSold,
-            _raffle.winningTickets,
-            _raffle.raffleStartTime,
-            _raffle.raffleEndTime
-        );
+        return raffles[_category][_raffleID];
     }
 
-    function buyTicket(RaffleCategory _category, uint256[] memory _tickets)
+    function buyTicket(RaffleCategory _category, uint32[] memory _tickets)
         external
         notContract
         nonReentrant
@@ -1365,8 +1367,10 @@ contract Raffle is
             rafflesData[_category].raffleState == RaffleState.OPEN,
             "Raffle not open"
         );
-        //calculate amount to transfer
         RaffleData storage _raffleData = rafflesData[_category];
+        RaffleStruct storage _raffle = raffles[_category][raffleID];
+
+        //calculate amount to transfer
         uint256 amountToTransfer = _raffleData.ticketPrice * _tickets.length;
         USDCtoken.safeTransferFrom(
             address(msg.sender),
@@ -1374,10 +1378,11 @@ contract Raffle is
             amountToTransfer
         );
 
-        RaffleStruct storage _raffle = raffles[_category][raffleID];
-        if (_raffle.userTickets[msg.sender] == 0) {
+        //check if user has already bought ticket in current Raffle
+        if (userTicketsPerRaffle[msg.sender][_category][raffleID].length == 0) {
             _raffle.noOfPlayers++;
         }
+
         _raffleData.rafflePool += amountToTransfer;
         storeUserTransactions(_category, _tickets.length);
         assignTickets(_category, _tickets);
@@ -1396,28 +1401,39 @@ contract Raffle is
         uint256 _noOfTickets
     ) internal {
         uint256 txIndex = userTransactionHistory[msg.sender].length;
-        userTransactionHistory[msg.sender].push();
-        Transaction storage _transaction = userTransactionHistory[msg.sender][
-            txIndex
-        ];
+
+        Transaction memory _transaction;
+        _transaction.txID = txIndex;
         _transaction.time = block.timestamp;
         _transaction.raffleCategory = _category;
         _transaction.noOfTickets = _noOfTickets;
+
+        userTransactionHistory[msg.sender].push(_transaction);
+
         emit NewUserTransaction(
             txIndex,
-            _transaction.time,
-            _transaction.raffleCategory,
-            _transaction.noOfTickets
+            block.timestamp,
+            _category,
+            _noOfTickets
         );
     }
 
-    function assignTickets(RaffleCategory _category, uint256[] memory _tickets)
+    function assignTickets(RaffleCategory _category, uint32[] memory _tickets)
         internal
     {
         RaffleStruct storage _raffle = raffles[_category][raffleID];
         for (uint256 n = 0; n < _tickets.length; n++) {
-            _raffle.tickets.push(_tickets[n]);
-            _raffle.ticketOwner[_tickets[n]] = msg.sender;
+            currentTicketID++;
+            uint32 thisTicketNumber = _tickets[n];
+
+            userTicketsPerRaffle[msg.sender][_category][raffleID].push(
+                thisTicketNumber
+            );
+
+            ticketsRecord[_category][currentTicketID] = Ticket({
+                ticketNumber: thisTicketNumber,
+                owner: msg.sender
+            });
         }
         _raffle.noOfTicketsSold += _tickets.length;
     }
@@ -1431,27 +1447,20 @@ contract Raffle is
         _raffle.winnersPayout = [_25percent, _15percent, _10percent];
     }
 
-    function getUserTransactionCount() external view returns (uint256) {
-        return (userTransactionHistory[msg.sender].length);
-    }
-
-    function getuserTransactionHistory(uint256 txIndex)
+    function getUserTransactionCount(address _user)
         external
         view
-        returns (
-            uint256 timestamp,
-            RaffleCategory raffleCategory,
-            uint256 noOfTickets
-        )
+        returns (uint256)
     {
-        Transaction storage _transaction = userTransactionHistory[msg.sender][
-            txIndex
-        ];
-        return (
-            _transaction.time,
-            _transaction.raffleCategory,
-            _transaction.noOfTickets
-        );
+        return userTransactionHistory[_user].length;
+    }
+
+    function getuserTransactionHistory(address _user, uint256 _txIndex)
+        external
+        view
+        returns (Transaction memory userTransaction)
+    {
+        return userTransactionHistory[_user][_txIndex];
     }
 
     function getWinningTickets(RaffleCategory _category)
@@ -1472,36 +1481,50 @@ contract Raffle is
         override
     {
         RaffleCategory _category = bytesCategoryMapping[requestId];
-        uint256[] memory winningTickets = expand(_category, randomness);
-        getWinners(_category, winningTickets);
+        uint256[] memory winningTicketsPosn = expand(_category, randomness);
+        getWinners(_category, winningTicketsPosn);
     }
 
     function expand(RaffleCategory _category, uint256 randomValue)
         internal
         view
-        returns (uint256[] memory winningTickets)
+        returns (uint256[] memory)
     {
         RaffleStruct storage _raffle = raffles[_category][raffleID];
 
-        winningTickets = new uint256[](noOfWinners);
+        uint256[] memory winningTicketsIDs = new uint256[](noOfWinners);
 
         for (uint256 i = 0; i < noOfWinners; i++) {
-            winningTickets[i] =
-                uint256(keccak256(abi.encode(randomValue, i))) %
-                _raffle.noOfTicketsSold;
+            winningTicketsIDs[i] =
+                (uint256(keccak256(abi.encode(randomValue, i))) %
+                    _raffle.noOfTicketsSold) +
+                1;
         }
-        return winningTickets;
+        return winningTicketsIDs;
     }
 
     function getWinners(
         RaffleCategory _category,
-        uint256[] memory _winningTickets
+        uint256[] memory _winningTicketsIDs
     ) internal {
         RaffleStruct storage _raffle = raffles[_category][raffleID];
+
         for (uint256 i = 0; i < noOfWinners; i++) {
-            uint256 ticketNos = _raffle.tickets[_winningTickets[i]];
-            _raffle.winners[i] = _raffle.ticketOwner[ticketNos];
+            uint256 ticketIDsBeforeCurrentRaffle = currentTicketID -
+                _raffle.noOfTicketsSold;
+
+            uint256 currentWinningTicketID = ticketIDsBeforeCurrentRaffle +
+                _winningTicketsIDs[i];
+
+            _raffle.winningTickets[i] = ticketsRecord[_category][
+                currentWinningTicketID
+            ].ticketNumber;
+
+            _raffle.winners[i] = ticketsRecord[_category][
+                currentWinningTicketID
+            ].owner;
         }
+
         setRaffleState(_category, RaffleState.PAYOUT);
     }
 
@@ -1570,7 +1593,7 @@ contract Raffle is
                 ((block.timestamp > currentRaffleEndTime) &&
                     (_raffleData.raffleState == RaffleState.OPEN))
             ) {
-                if (_raffle.noOfTicketsSold < 10 && _raffle.noOfPlayers < 5) {
+                if (_raffle.noOfTicketsSold < 10 || _raffle.noOfPlayers < 5) {
                     upkeepNeeded = true;
                     performData = abi.encode(4, _category);
                     break;
@@ -1606,7 +1629,7 @@ contract Raffle is
         } else if (comment == 3) {
             startRaffle();
         } else if (comment == 4) {
-            rollover(_category);
+            rollover(_category, false);
         }
     }
 
@@ -1642,30 +1665,38 @@ contract Raffle is
         emit LotteryInjection(_category, raffleID, _amount);
     }
 
-    function rollover(RaffleCategory _category) internal {
+    function rollover(RaffleCategory _category, bool _deactivated) internal {
         RaffleStruct storage _raffle = raffles[_category][raffleID];
-        if (_raffle.noOfTicketsSold > 0) {
-            for (uint256 i; i < _raffle.noOfTicketsSold; i++) {
-                address player = _raffle.ticketOwner[i];
-                rollovers[_category][player] = _raffle.userTickets[player];
-            }
+        if (!_deactivated) {
+            setRaffleState(_category, RaffleState.WAITING_FOR_REBOOT);
+            rebootChecker++;
         }
-        setRaffleState(_category, RaffleState.WAITING_FOR_REBOOT);
-        rebootChecker++;
+        if (_raffle.noOfTicketsSold < 0) {
+            return;
+        }
+        uint256 noOfTicketsBeforeThisRaffle = currentTicketID -
+            _raffle.noOfTicketsSold;
+        for (uint256 i = 1; i <= _raffle.noOfTicketsSold; i++) {
+            uint256 _thisTicketID = noOfTicketsBeforeThisRaffle + i;
+            address player = ticketsRecord[_category][_thisTicketID].owner;
+            rollovers[_category][player] = userTicketsPerRaffle[player][
+                _category
+            ][raffleID].length;
+        }
     }
 
-    function viewRollovers(RaffleCategory _category)
+    function viewUserRollovers(RaffleCategory _category, address _user)
         external
         view
         returns (uint256 ticketsToRollover)
     {
-        return (rollovers[_category][msg.sender]);
+        return rollovers[_category][_user];
     }
 
     function claimRollover(
         RaffleCategory _category,
         uint256 _ticketsToRollover,
-        uint256[] memory _tickets
+        uint32[] memory _tickets
     ) external notContract hasRollovers(_category) nonReentrant {
         require(
             _ticketsToRollover == rollovers[_category][msg.sender],
@@ -1687,7 +1718,7 @@ contract Raffle is
         );
     }
 
-    function checkLinkBalance() public view returns (uint256) {
+    function checkLinkBalance() external view returns (uint256) {
         return (LINK.balanceOf(address(this)));
     }
 
@@ -1714,11 +1745,12 @@ contract Raffle is
             RaffleCategory.INVESTOR,
             RaffleCategory.WHALE
         ];
+
         for (uint256 i = 0; i < categoryArray.length; i++) {
-            RaffleCategory _category = categoryArray[i];
-            setRaffleState(_category, RaffleState.DEACTIVATED);
-            rollover(_category);
+            rollover(categoryArray[i], true);
+            setRaffleState(categoryArray[i], RaffleState.DEACTIVATED);
         }
+
         rebootChecker = 0;
         currentRaffleEndTime = 0;
         currentRaffleRebootEndTime = 0;
@@ -1761,6 +1793,10 @@ contract Raffle is
         isRaffleDeactivated(_category)
         nonReentrant
     {
+        require(
+            rollovers[_category][msg.sender] != 0,
+            "You do not have any rollovers"
+        );
         RaffleData storage _raffleData = rafflesData[_category];
         uint256 tickets = rollovers[_category][msg.sender];
         uint256 amount = tickets * _raffleData.ticketPrice;
@@ -1785,7 +1821,7 @@ contract Raffle is
     //Odds of Winning is increased by the number of tickets a person buys, but it does not guarantee winning,
     // as the randomness is generated randomly using the chainlink vrf and not with any existing variable in the contract
 
-    // Users are given indexes for each ticket bought, a mapping to store the each user to a ticket id.
+    // Users are given indexes for each tixcket bought, a mapping to store the each user to a ticket id.
     // So after the raffle is drawn lucky index number for raffle is chosen and the winners are awarded
     // Since there are 3 winners raffles will be drawn thrice.
     // first winner is the first person 25%

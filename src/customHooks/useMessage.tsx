@@ -20,14 +20,15 @@ export function useMessage(){
         }else{
           setMessage("Approve")
       }
-      }else{
-        setMessage("Connect Wallet")
       }
     };
 
     useEffect(()=> {
       handleMessage();
       //eslint-disable-next-line
+      return () => {
+        setMessage(""); // This worked for me
+      };
     }, [])
 
     return message;

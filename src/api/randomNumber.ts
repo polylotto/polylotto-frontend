@@ -1,17 +1,10 @@
-import { Promise } from "bluebird";
-import randomNumber from "random-number-csprng";
+import { Random } from "random-js";
 
-export const generateRandomTickets = (_numOfTickets: number) => {
-  const tickets: number[] = []
+export function generateRandomTickets(_numOfTickets: number) {
+  const tickets = new Array(_numOfTickets);
   for (let i = 0; i < _numOfTickets; i++) {
-    Promise.try(function () {
-      return randomNumber(10000, 99999);
-    }).then(function (number) {
-      if (tickets.includes(number)) {
-        return
-      }
-      tickets.push(number);
-    })
+    const random = new Random();
+    tickets[i] = random.integer(10000, 99999);
   }
   return tickets;
 }
