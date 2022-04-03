@@ -156,8 +156,6 @@ export async function buyTickets(
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
     const { raffleCategory, tickets } = params;
 
-    console.log(tickets)
-
     await raffleContract.methods.buyTicket(raffleCategory, tickets).send({
         from: account
     });
