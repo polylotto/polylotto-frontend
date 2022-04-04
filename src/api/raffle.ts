@@ -110,7 +110,7 @@ export async function get(
         if (txIndex < 0) {
             break;
         }
-        const tx = await raffleContract.methods.getUserTransactionHistory(account, txIndex).call();
+        const tx = await raffleContract.methods.getuserTransactionHistory(account, txIndex).call();
         console.log(tx);
         userTransactions.push({
             txIndex: tx.txID,
