@@ -3,7 +3,7 @@ import { useUserContext } from "../context/user";
 import { useWeb3Context } from "../context/web3";
 import * as raffle from "../api/raffle";
 
-export function useMessage(){
+export function useMessage( isApproving: boolean, isBuying: boolean){
    
     const [ message, setMessage] = useState("Checking Approval")
 
@@ -11,25 +11,29 @@ export function useMessage(){
 
     const {state: {account} } = useWeb3Context();
 
-    const handleMessage = async () => {
-      if(account && userConnected){
-        const allowance = await raffle.checkAllowance(account);
-      
-        if(allowance){
-          setMessage("Pay Now")
-        }else{
-          setMessage("Approve")
-      }
-      }
-    };
-
     useEffect(()=> {
+
+      const handleMessage = async () => {
+        if(account && userConnected){
+          const allowance = await raffle.checkAllowance(account);
+
+          if(isApproving || isBuying){
+            setMessage("")
+          }else if(allowance){
+            setMessage("Pay Now")
+          }else{
+            setMessage("Approve")
+          }
+  
+        }
+      };
+      
       handleMessage();
       //eslint-disable-next-line
-      return () => {
-        setMessage(""); // This worked for me
-      };
-    }, [])
+      // return () => {
+      //   setMessage(""); // This worked for me
+      // };
+    }, [isApproving, isBuying])
 
-    return message;
+    return message? message : <i className="fa fa-circle-o-notch fa-spin"></i>;
 }

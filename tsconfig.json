@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-, "contract/1"  ]
+, "contract/1", "contract/web3V2.ts"  ]
 }

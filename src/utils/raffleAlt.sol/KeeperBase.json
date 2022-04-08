@@ -1,0 +1,16 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "KeeperBase",
+  "sourceName": "contracts/raffleAlt.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "OnlySimulatedBackend",
+      "type": "error"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220cf5e4d72388ea3fbeabe785dccc95165f074f0666fb65ade035381846e55dc3964736f6c63430008040033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220cf5e4d72388ea3fbeabe785dccc95165f074f0666fb65ade035381846e55dc3964736f6c63430008040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

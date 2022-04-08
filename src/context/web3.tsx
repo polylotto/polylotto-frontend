@@ -5,36 +5,47 @@ import React, {
     useMemo,
     useReducer,
 } from "react";
-import { subscribeToAccount } from "../api/web3";
-
+import { subscribeToAccount, subscribeToChainID, getChainID } from "../api/web3";
+import { useUserContext } from "../context/user";
+ 
 
 interface State {
     account: string;
+    chainId: string;
 }
 
 const INITIAL_STATE: State = {
     account: "",
+    chainId: "0x13881",
 };
 
 
 const LOCAL_STATE: State = {
-  account: getLocalStorage()
+  account: getLocalStorage("account"),
+  chainId: "0x13881",
 }
 
-function getLocalStorage(){
-  const _localState= localStorage.getItem("account");
+function getLocalStorage(item: string){
+  const _localState = localStorage.getItem(item);
   const localState : string = _localState !== null? JSON.parse(_localState) : "";
   return localState;
 }
 
+
 const UPDATE_ACCOUNT = "UPDATE_ACCOUNT";
+const UPDATE_CHAIN_ID = "UPDATE_CHAIN_ID";
 
 interface UpdateAccount {
     type: "UPDATE_ACCOUNT";
     account: string;
 }
 
-type Action = UpdateAccount;
+interface UpdateChainId {
+  type: "UPDATE_CHAIN_ID";
+  chainId: string;
+}
+
+type Action = UpdateAccount | UpdateChainId;
 
 
 function reducer(state: State = LOCAL_STATE || INITIAL_STATE, action: Action) {
@@ -45,6 +56,13 @@ function reducer(state: State = LOCAL_STATE || INITIAL_STATE, action: Action) {
                 ...state,
                 account,
             };
+        }
+        case UPDATE_CHAIN_ID: {
+          const { chainId } = action;
+          return {
+              ...state,
+              chainId,
+          }
         }
         default:
             return state;
@@ -93,6 +111,7 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
 
 export function Updater() {
     const { state, updateAccount } = useWeb3Context();
+    const {updateConnection} = useUserContext();
   
     useEffect(() => {
       if (state.account) {
@@ -100,14 +119,34 @@ export function Updater() {
           if (error) {
             console.error(error);
           }
+          if(account === "locked"){
+            updateAccount({account:""})
+            updateConnection({userConnected:false});
+          }
           if (account !== "" && account !== state.account) {
             updateAccount({account})
           }
         });
-  
         return unsubscribe;
       }
     }, [state.account]);
+
+    useEffect(() => {
+      if(state.account){
+        const unsubscribeChain = getChainID((error, chainId) => {
+          if (error) {
+            console.error(error);
+          }
+          if(chainId){
+             if (chainId !== state.chainId){
+               subscribeToChainID();
+            }
+          }
+        });
+        
+        return unsubscribeChain;
+      }
+    }, [state.account, state.chainId])
     return null;
   }
   

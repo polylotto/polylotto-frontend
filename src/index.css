@@ -576,6 +576,17 @@ hr {
   justify-content: end;
 }
 
+.btn-edit {
+  width: 9em;
+  border-width: 1px;
+  border-color: azure;
+  border-radius: 6px;
+}
+
+.btn-edit i {
+  font-size: 15px; /* Set a font size */
+}
+
 @media (max-width: 1000px) {
   .logo {
     margin-left: 0rem;

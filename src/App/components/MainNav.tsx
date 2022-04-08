@@ -1,7 +1,7 @@
 import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { IconProp } from '@fortawesome/fontawesome-svg-core';
+// import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Link } from "react-router-dom";
 import useAsync from "../../async/useAsync";
 import { connectWalletMetamask } from "../../api/web3"; 
@@ -44,7 +44,7 @@ const MainNav: React.FC<Props> = () =>{
                 <li className="nav-item">
                 <Link to="/">
                         {/* <img src={home} className="home"alt="home icon"/> */}
-                        <FontAwesomeIcon icon={faHome as IconProp} fontSize={35} className="home"/>
+                        <i className="fas fa-home"></i>
                     </Link>
                 </li>
                 {userConnected && account? 

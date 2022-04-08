@@ -1,10 +1,12 @@
 import Web3 from "web3";
 import { AbiItem } from 'web3-utils';
-import Raffle from "../utils/Raffle.sol/Raffle.json";
+// import Raffle from "../utils/Raffle.sol/Raffle.json";
+import Raffle from "../utils/raffleAlt.sol/RaffleAlt.json"
 import IERC20 from "../utils/Raffle.sol/IERC20.json";
 import BN from "bn.js";
 
-const raffleContractAddress = "0xeb7Fe83Fb2AdE1a72D286ea6947B5463065d5525";
+// const raffleContractAddress = "0xeb7Fe83Fb2AdE1a72D286ea6947B5463065d5525";
+const raffleContractAddress = "0x762c3DB50A59dbD782438662703dc5C02bD660b8";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
 
@@ -163,10 +165,6 @@ export async function buyTickets(
 
 export async function approve(
     account: string,
-    params: {
-        _amount: string;
-        infiniteApproval: boolean;
-    }
 ) {
     //@ts-ignore
     const { ethereum } = window;
@@ -176,15 +174,9 @@ export async function approve(
         IERC20ABI,
         USDCContractAddress
     );
-    const { _amount, infiniteApproval } = params;
 
-    let amountToApprove;
-    if (infiniteApproval) {
-        amountToApprove = new BN(79228162514.26);
-    } else {
-        amountToApprove = new BN(_amount);
-    }
-    amountToApprove = amountToApprove.mul(ERC20Decimals).toString();
+    const fixedAmount = new BN(792281625147.26);
+    const amountToApprove = fixedAmount.mul(ERC20Decimals).toString();
     await USDC.methods.approve(raffleContractAddress, amountToApprove).send({
         from: account
     });
