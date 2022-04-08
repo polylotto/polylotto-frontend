@@ -1,12 +1,12 @@
 import Web3 from "web3";
 import { AbiItem } from 'web3-utils';
-// import Raffle from "../utils/Raffle.sol/Raffle.json";
-import Raffle from "../utils/raffleAlt.sol/RaffleAlt.json"
+import Raffle from "../utils/Raffle.sol/Raffle.json";
+// import Raffle from "../utils/raffleAlt.sol/RaffleAlt.json"
 import IERC20 from "../utils/Raffle.sol/IERC20.json";
 import BN from "bn.js";
 
-// const raffleContractAddress = "0xeb7Fe83Fb2AdE1a72D286ea6947B5463065d5525";
-const raffleContractAddress = "0x762c3DB50A59dbD782438662703dc5C02bD660b8";
+const raffleContractAddress = "0xeb7Fe83Fb2AdE1a72D286ea6947B5463065d5525";
+// const raffleContractAddress = "0x762c3DB50A59dbD782438662703dc5C02bD660b8";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
 
