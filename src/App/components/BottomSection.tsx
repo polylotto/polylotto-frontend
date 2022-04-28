@@ -1,4 +1,5 @@
 import Cards from "./Cards";
+import HowItWorks from "./HowItWorks";
 
 const BottomSection = () => {
     return (
@@ -6,6 +7,7 @@ const BottomSection = () => {
             <div className="container">
                 <Cards />
             </div>
+            <HowItWorks />
         </div>
     );
 }

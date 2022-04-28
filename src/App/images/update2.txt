@@ -1,0 +1,50 @@
+Updating 65ef1da..e8cd125
+Fast-forward
+ package-lock.json                   |  15 ++++++----
+ package.json                        |   7 +++--
+ public/_redirects                   |   1 +
+ src/App.js                          |   7 +++++
+ src/api/DateValue.js                |   4 +--
+ src/components/404.jsx              |  22 ++++++++++++++
+ src/components/BottomSection.js     |   2 ++
+ src/components/HowItWorks.jsx       |  41 ++++++++++++++++++++++++++
+ src/components/MainNav.js           |  10 +++++--
+ src/components/OrderSummary.js      |   6 ++--
+ src/components/PrizePot.jsx         |  61 ++++++++++++++++++++++++++++++++++++++
+ src/components/RoundTickets.jsx     |  23 +++++++++++++++
+ src/components/TickectSection.js    |  46 ++++++++++++++++-------------
+ src/components/WinningCategory.jsx  |  25 ++++++++++++++++
+ src/context/TickectNumberContext.js |  27 +++++++++++++++++
+ src/images/1.svg                    |  11 +++++++
+ src/images/2.svg                    |  11 +++++++
+ src/images/3.svg                    |  11 +++++++
+ src/images/404.png                  | Bin 0 -> 7968 bytes
+ src/images/step.png                 | Bin 0 -> 27633 bytes
+ src/index.js                        |   2 +-
+ src/styles/404.css                  |  57 +++++++++++++++++++++++++++++++++++
+ src/{ => styles}/App.css            |   0
+ src/styles/howitworks.css           |  92 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/{ => styles}/index.css          | 128 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------------
+ src/styles/prizepot.css             | 181 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/{ => styles}/switch.css         |   0
+ src/{ => styles}/transactions.css   |  25 ++++++++++++++--
+ 28 files changed, 751 insertions(+), 64 deletions(-)
+ create mode 100644 public/_redirects
+ create mode 100644 src/components/404.jsx
+ create mode 100644 src/components/HowItWorks.jsx
+ create mode 100644 src/components/PrizePot.jsx
+ create mode 100644 src/components/RoundTickets.jsx
+ create mode 100644 src/components/WinningCategory.jsx
+ create mode 100644 src/context/TickectNumberContext.js
+ create mode 100644 src/images/1.svg
+ create mode 100644 src/images/2.svg
+ create mode 100644 src/images/3.svg
+ create mode 100644 src/images/404.png
+ create mode 100644 src/images/step.png
+ create mode 100644 src/styles/404.css
+ rename src/{ => styles}/App.css (100%)
+ create mode 100644 src/styles/howitworks.css
+ rename src/{ => styles}/index.css (86%)
+ create mode 100644 src/styles/prizepot.css
+ rename src/{ => styles}/switch.css (100%)
+ rename src/{ => styles}/transactions.css (71%)

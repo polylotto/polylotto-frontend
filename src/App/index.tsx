@@ -5,6 +5,7 @@ import TicketSection from "./components/TicketSection";
 import ComingSoon  from "./components/ComingSoon";
 import { Footer } from "./components/Footer";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Page404 from "./components/404";
 
 function App() {
 
@@ -37,6 +38,8 @@ function App() {
           <Route path="/coming">
             <ComingSoon />
           </Route>
+
+          <Route component={Page404} />
         </Switch>
         <Footer></Footer>
     </div>

@@ -1203,6 +1203,12 @@ contract Raffle is
         uint256 numberTickets,
         uint256 rafflePool
     );
+    event NewUserTransaction(
+        uint256 txIndex,
+        uint256 timestamp,
+        RaffleCategory raffleCategory,
+        uint256 noOfTickets
+    );
     event RolloverClaimed(
         RaffleCategory raffleCategory,
         uint256 indexed raffleId,
@@ -1228,12 +1234,6 @@ contract Raffle is
     event NewTreasuryAndInjectorAddresses(
         address treasuryAddress,
         address injectorAddress
-    );
-    event NewUserTransaction(
-        uint256 txIndex,
-        uint256 timestamp,
-        RaffleCategory raffleCategory,
-        uint256 noOfTickets
     );
     event RaffleDeactivated(
         uint256 raffleID,
@@ -1356,6 +1356,14 @@ contract Raffle is
         return raffles[_category][_raffleID];
     }
 
+    function viewUserTickets(
+        RaffleCategory _category,
+        address _user,
+        uint256 _raffleID
+    ) external view returns (uint32[] memory) {
+        return userTicketsPerRaffle[_user][_category][_raffleID];
+    }
+
     function buyTicket(RaffleCategory _category, uint32[] memory _tickets)
         external
         notContract
@@ -1387,6 +1395,7 @@ contract Raffle is
         storeUserTransactions(_category, _tickets.length);
         assignTickets(_category, _tickets);
         updateWinnersPayouts(_category);
+
         emit TicketsPurchased(
             _category,
             raffleID,

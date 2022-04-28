@@ -24,11 +24,12 @@ interface RaffleData {
 }
 
 interface CategoryData {
-    raffleCategory: Number;
+    raffleCategory: number;
     rafflePool: string;
     currentRaffleState: string;
     currentRaffle: RaffleData;
     mostRecentRaffles: RaffleData[];
+    userTicketsPerRaffle: number[];
 }
 
 interface Transaction {
@@ -74,6 +75,7 @@ const NavDropDown: React.FC<Props> = () =>{
 
     const toggleTransactionHistory = ()=>{
         transcState ? setTranscState(false) : setTranscState(true);
+        setNavOptionsState(false);
     }
 
     const toggleNavOption = (e: React.MouseEvent<HTMLAnchorElement>)=>{
@@ -93,6 +95,10 @@ const NavDropDown: React.FC<Props> = () =>{
         set(INITIAL_STATE);
     }
 
+    const toggleOff = (e: React.MouseEvent<HTMLAnchorElement>)=>{
+        setNavOptionsState(false);
+    }
+
     return (
         <>
             <li  className="wallet-nav">
@@ -105,7 +111,7 @@ const NavDropDown: React.FC<Props> = () =>{
                 !navOptionsState ? <></> : createPortal(
                     <div className="nav-options">
                         <ul>
-                            <li><a href={`https://mumbai.polygonscan.com/address/${account}`} target="_blank" rel="noopener noreferrer">Your Wallet</a></li>
+                            <li><a href={`https://mumbai.polygonscan.com/address/${account}`} onClick={toggleOff} target="_blank" rel="noopener noreferrer">Your Wallet</a></li>
                             <li><a href="# " onClick={toggleTransactionHistory}>Recent Transactions</a></li>
                             <hr />
                             <li className="disconnect">

@@ -5,7 +5,7 @@ import Raffle from "../utils/Raffle.sol/Raffle.json";
 import IERC20 from "../utils/Raffle.sol/IERC20.json";
 import BN from "bn.js";
 
-const raffleContractAddress = "0xeb7Fe83Fb2AdE1a72D286ea6947B5463065d5525";
+const raffleContractAddress = "0xECa52E984ff13bb231DDAD728D34aa9EFa1FC279";
 // const raffleContractAddress = "0x762c3DB50A59dbD782438662703dc5C02bD660b8";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
@@ -33,11 +33,12 @@ interface RaffleData {
     amountInjected: string;
 }
 interface CategoryData {
-    raffleCategory: Number;
+    raffleCategory: number;
     rafflePool: string;
     currentRaffleState: string;
     currentRaffle: RaffleData;
     mostRecentRaffles: RaffleData[];
+    userTicketsPerRaffle: number[];
 }
 interface GetResponse {
     contractLinkBalance: string;
@@ -48,6 +49,18 @@ interface GetResponse {
 interface CountDown {
     currentRaffleEndTime: string;
     currentRaffleRebootEndTime: string;
+}
+
+const init_raffle: RaffleData = {
+    raffleID: 0,
+    noOfTicketSold: 0,
+    noOfPlayers: "0",
+    winners: [],
+    winningTickets: [],
+    winnersPayout: [],
+    raffleStartTime: "0",
+    raffleEndTime: "0",
+    amountInjected: "0"
 }
 
 export async function get(
@@ -89,12 +102,14 @@ export async function get(
         }
         const currentRaffleState = await raffleContract.methods.getCurrentRaffleState(i).call();
         const rafflePool = await raffleContract.methods.getRafflePool(i).call();
+        const userTicketsPerRaffle = await raffleContract.methods.viewUserTickets(i, account, raffleID).call();
         raffleCategoryData.push({
             raffleCategory: i,
             rafflePool,
             currentRaffleState,
-            currentRaffle: raffles[0],
-            mostRecentRaffles: raffles
+            currentRaffle: raffles[0] || init_raffle,
+            mostRecentRaffles: raffles,
+            userTicketsPerRaffle
         })
     }
 

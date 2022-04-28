@@ -1,7 +1,8 @@
 .transactions{
     position: absolute;
-    top: 6rem;
-    right: 8rem;
+    top: 10%;
+    right: 10%;
+    transform: translateX(-50%);
     height: 16.5rem;
     overflow-y: scroll;
     padding: 1rem 1rem 2rem 1rem;
@@ -10,6 +11,22 @@
     border-collapse: separate;
     color: var(--bg-color);
     box-shadow: 4px 9px 18px #244d9449;
+    z-index: 10;
+}
+
+.modal_styling {
+	position: fixed;
+    width: 100%;
+    height: 100%;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    z-index: 100;
 }
 
 .transactions p{
@@ -47,9 +64,26 @@ tr, tbody td{
 
 @media (max-width: 700px) {
     .transactions{
+        font-size: 0.9rem;
         right: 0;
-        transform: translateX(-10%);
-        width: 25rem;
+        top: 0;
+        width: 90%;
+        transform: translate(-5%, 30%);
         height: 20rem;
+        margin: auto;
+    }
+    th{
+        font-size: 0.7rem;
+    }
+    td{
+        font-size: 0.7rem;
+    }
+
+
+}
+
+@media (max-width: 400px){
+    .transactions p{
+        font-size: 2.5rem;
     }
 }

@@ -1,5 +1,5 @@
 import { StyledModal } from "../StyledComponents/Modal.styles";
-import React, {Dispatch, SetStateAction, useState, useRef} from "react";
+import React, {Dispatch, SetStateAction, useRef} from "react";
 import reactDom from "react-dom";
 import { useWeb3Context } from "../../context/web3";
 import { Button } from "semantic-ui-react";
@@ -35,7 +35,6 @@ export const OrderSummary: React.FC<Props> = ({type, amount, raffleCategory, num
     if(!account){
       throw new Error("Not connected");
     }
-    const _amount = (amount*numOfTickets).toString();
     await raffle.approve(account)
   
   })

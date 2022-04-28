@@ -39,11 +39,12 @@ interface RaffleData {
     amountInjected: string;
 }
 interface CategoryData {
-    raffleCategory: Number;
+    raffleCategory: number;
     rafflePool: string;
     currentRaffleState: string;
     currentRaffle: RaffleData;
     mostRecentRaffles: RaffleData[];
+    userTicketsPerRaffle: number[];
 }
 
 const INITIAL_STATE: State = {

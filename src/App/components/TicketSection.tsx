@@ -9,6 +9,7 @@ import background from "../images/SVGPolylogo.svg";
 import { useRaffleContext } from "../../context/raffle";
 import {useWeb3Context} from "../../context/web3";
 import {useUserContext} from "../../context/user";
+import PrizePot from "./PrizePot"
 
 // import { OrderSummary } from "./OrderSummary2"
 
@@ -35,6 +36,7 @@ const TicketSection: React.FC<TicketProps> = ({
         updateConnection,
     } = useUserContext();
 
+    // eslint-disable-next-line
     const { pending, call } = useAsync(connectWalletMetamask);
 
     async function onClickConnect() {
@@ -74,6 +76,10 @@ const TicketSection: React.FC<TicketProps> = ({
     return(
         <>
             <div className="ticket-section">
+                <div className="ticket-img">
+                    <img src={background} alt="" />
+                </div>
+                
                 <div className="ticket-content">
                 {(raffleCheck())? <CountdownDeactivated></CountdownDeactivated> : <CountdownTimer></CountdownTimer>}
                     <div className="ticket container">
@@ -101,10 +107,11 @@ const TicketSection: React.FC<TicketProps> = ({
                         {onShow? <OrderSummary type={title} amount={amount} numOfTickets={Number(numTicket)} raffleCategory={raffleCategory} setOnShow={setOnShow} isVisible={true}/> : <></>}
                     </div> 
                 </div>
-                <div  className="ticket-img">
+                {/* <div  className="ticket-img">
                     <img src={background} alt="" />
-                </div>
+                </div> */}
             </div>
+            <PrizePot raffleCategory={raffleCategory}/>
         </>
     );
 }

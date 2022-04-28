@@ -24,27 +24,29 @@ const TranscHistory: React.FC<Props> = ({
         setTranscState(false)
     }
     return createPortal(
-        <div className="transactions">
-            <p><span onClick={hideTansactions}>&times;</span></p>
-            <table>
-                <thead>
-                        <tr>
-                            <th>Transaction ID</th>
-                            <th>Time</th>
-                            <th>Date</th>
-                            <th>Game Type</th>
-                            <th>Address</th>
-                            <th>No. Ticket</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map(tx => (
-                            <tr key={tx.txIndex}>
-                                <TransactionDetails txIndex={tx.txIndex} timestamp={tx.timestamp} raffleCategory={tx.raffleCategory} noOfTickets={tx.noOfTickets}/>        
+        <div  className="modal_styling">
+            <div  className="transactions">
+                <p><span onClick={hideTansactions}>&times;</span></p>
+                <table>
+                    <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Time</th>
+                                <th>Date</th>
+                                <th>Game Type</th>
+                                <th>Address</th>
+                                <th>No. Ticket</th>
                             </tr>
-                        ))}                        
-                    </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                            {data.map(tx => (
+                                <tr key={tx.txIndex}>
+                                    <TransactionDetails txIndex={tx.txIndex} timestamp={tx.timestamp} raffleCategory={tx.raffleCategory} noOfTickets={tx.noOfTickets}/>        
+                                </tr>
+                            ))}                        
+                        </tbody>
+                </table>
+            </div>
         </div>, document.querySelector("body")!
     );
 }
