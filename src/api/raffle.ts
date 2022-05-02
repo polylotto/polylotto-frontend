@@ -1,19 +1,16 @@
 import Web3 from "web3";
 import { AbiItem } from 'web3-utils';
 import Raffle from "../utils/Raffle.sol/Raffle.json";
-// import Raffle from "../utils/raffleAlt.sol/RaffleAlt.json"
 import IERC20 from "../utils/Raffle.sol/IERC20.json";
-import BN from "bn.js";
+import { ERC20_DECIMALS } from "../utils/constants";
+import BigNumber from "bignumber.js";
 
 const raffleContractAddress = "0xECa52E984ff13bb231DDAD728D34aa9EFa1FC279";
 // const raffleContractAddress = "0x762c3DB50A59dbD782438662703dc5C02bD660b8";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
-
 const raffleContractABI = Raffle.abi as AbiItem[];
 const IERC20ABI = IERC20.abi as AbiItem[];
-
-const ERC20Decimals = new BN("10").pow(new BN("18"));
 
 interface Transaction {
     txIndex: number;
@@ -190,8 +187,8 @@ export async function approve(
         USDCContractAddress
     );
 
-    const fixedAmount = new BN(792281625147.26);
-    const amountToApprove = fixedAmount.mul(ERC20Decimals).toString();
+    const fixedAmount = new BigNumber(792281625147.26);
+    const amountToApprove = fixedAmount.shiftedBy(ERC20_DECIMALS).toString();
     await USDC.methods.approve(raffleContractAddress, amountToApprove).send({
         from: account
     });
@@ -280,8 +277,8 @@ export async function injectFunds(
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
     const { raffleCategory, amount } = params;
-    let amountToSend = new BN(amount);
-    amountToSend = amountToSend.mul(ERC20Decimals);
+    let amountToSend = new BigNumber(amount);
+    amountToSend = amountToSend.shiftedBy(ERC20_DECIMALS);
     await raffleContract.methods.injectFunds(raffleCategory, amountToSend.toString()).send({
         from: account
     });

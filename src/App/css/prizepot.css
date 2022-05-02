@@ -51,14 +51,14 @@
 
 .round-tickets{
     position: absolute;
-    transform: translate(50%, 5%);
     box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.397);
     z-index: 10;
     background-color: #ffff;
     color: var(--bg-color);
     border-radius: 30px;
-    width: 20rem;
-    left: 25%
+    width: 50%;
+    left: 0;
+    transform: translate(50%, 5%);
 }
 
 .tickets_modal {
@@ -180,8 +180,12 @@
 
 @media (max-width: 900px) {
     .round-tickets{
-        width: auto;
-        left: 15%
+        width: 80%;
+        left: 0%;
+        transform: translate(12%, 5%);
+    }
+    .round-tickets p:first-child{
+        font-size: 1rem;
     }
     .winning-category{
         grid-template-columns: 1fr;

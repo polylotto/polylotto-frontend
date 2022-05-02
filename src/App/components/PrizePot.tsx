@@ -3,6 +3,7 @@ import "../css/prizepot.css"
 import { RoundTickets } from './RoundTickets';
 import WinningCategory from './WinningCategory';
 import { useRaffleContext } from '../../context/raffle';
+import { formatBigNumber } from '../../utils/utils';
 
 interface props {
     raffleCategory: number;
@@ -20,7 +21,7 @@ const PrizePot: React.FC<props> = ({
         ticketModal ? setTicketModal(false) : setTicketModal(true)
     }
     const {state} = useRaffleContext();
-    const categoryData = state.raffleCategoryData == []? 0 : state.raffleCategoryData[raffleCategory];
+    const categoryData = state.raffleCategoryData === []? 0 : state.raffleCategoryData[raffleCategory];
     const prizepot = categoryData? categoryData.rafflePool: 0;
     const tickets = categoryData? categoryData.userTicketsPerRaffle : [];
     const raffleId = categoryData? categoryData.currentRaffle.raffleID : 0;
@@ -35,7 +36,7 @@ const PrizePot: React.FC<props> = ({
             <div className="prizepot-profit">
                 <h2>Prize Pot</h2>
                 <div>
-                   <small>{prizepot} USDC</small>
+                   <small>{formatBigNumber(prizepot)} USDC</small>
                 </div>
             </div>
 

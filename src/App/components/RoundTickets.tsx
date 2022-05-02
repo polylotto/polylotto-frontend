@@ -22,16 +22,20 @@ export const RoundTickets: React.FC<props> = ({setTicketModal, tickets, raffleID
                 <div className="content">
                     <p>Your Tickets</p>
                     {/* <small>#{raffleID}</small> */}
-                    {tickets.map(ticket => (
-                        <p key={ticket} className='num'>
-                            #{ticket}
-                        </p>
-                    ))}                    
+                    {
+                        tickets.length !== 0 ? 
+                        tickets.map(ticket => (
+                            <p key={ticket} className='num'>
+                                #{ticket}
+                            </p>
+                        ))  
+                        : <p style={{color: "black", textAlign: "center", fontSize: "2rem", marginTop: "3rem", opacity: "0.7", wordWrap: "break-word"}}>No Ticket</p>
+
+                    }
                 </div>
             </div>
         </div>
     </>
   )
 }
-
 
