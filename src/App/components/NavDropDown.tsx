@@ -29,7 +29,7 @@ interface CategoryData {
     currentRaffleState: string;
     currentRaffle: RaffleData;
     mostRecentRaffles: RaffleData[];
-    userTicketsPerRaffle: number[];
+    userTicketsPerRaffle: string[];
 }
 
 interface Transaction {
