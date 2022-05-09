@@ -1200,7 +1200,7 @@ contract Raffle is
         RaffleCategory raffleCategory,
         uint256 indexed raffleId,
         address indexed buyer,
-        uint256 numberTickets,
+        uint32[] tickets,
         uint256 rafflePool
     );
     event NewUserTransaction(
@@ -1213,7 +1213,7 @@ contract Raffle is
         RaffleCategory raffleCategory,
         uint256 indexed raffleId,
         address buyer,
-        uint256 noOfTickets
+        uint32[] tickets
     );
     event RaffleEnded(
         RaffleCategory category,
@@ -1400,7 +1400,7 @@ contract Raffle is
             _category,
             raffleID,
             msg.sender,
-            _tickets.length,
+            _tickets,
             _raffleData.rafflePool
         );
     }
@@ -1719,12 +1719,7 @@ contract Raffle is
         storeUserTransactions(_category, _tickets.length);
         rollovers[_category][msg.sender] = 0;
 
-        emit RolloverClaimed(
-            _category,
-            raffleID,
-            msg.sender,
-            _ticketsToRollover
-        );
+        emit RolloverClaimed(_category, raffleID, msg.sender, _tickets);
     }
 
     function checkLinkBalance() external view returns (uint256) {

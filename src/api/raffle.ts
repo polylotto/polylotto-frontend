@@ -35,7 +35,7 @@ interface CategoryData {
     currentRaffleState: string;
     currentRaffle: RaffleData;
     mostRecentRaffles: RaffleData[];
-    userTicketsPerRaffle: number[];
+    userTicketsPerRaffle: string[];
 }
 interface GetResponse {
     contractLinkBalance: string;
@@ -389,7 +389,7 @@ interface TicketsPurchased {
         raffleCategory: string;
         raffleId: string;
         buyer: string;
-        numberTickets: string;
+        tickets: string[];
         rafflePool: string;
     }
 }
@@ -429,7 +429,7 @@ interface RolloverClaimed {
         raffleCategory: string;
         raffleId: string;
         buyer: string;
-        noOfTickets: string;
+        tickets: string[];
     }
 }
 

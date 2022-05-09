@@ -44,7 +44,7 @@ interface CategoryData {
     currentRaffleState: string;
     currentRaffle: RaffleData;
     mostRecentRaffles: RaffleData[];
-    userTicketsPerRaffle: number[];
+    userTicketsPerRaffle: string[];
 }
 
 const INITIAL_STATE: State = {
@@ -66,6 +66,7 @@ const RAFFLE_OPEN = "RAFFLE_OPEN";
 const RAFFLE_ENDED = "RAFFLE_ENDED";
 const UPDATE_RAFFLE_OPEN = "UPDATE_RAFFLE_OPEN";
 const DEACTIVATE_RAFFLE = "DEACTIVATE_RAFFLE";
+const TICKETS_PURCHASED = "TICKETS_PURCHASED";
 
 interface Set {
     type: "SET";
@@ -82,6 +83,17 @@ interface SetCountDown {
     data: {
         currentRaffleEndTime: string;
         currentRaffleRebootEndTime: string;
+    }
+}
+
+interface TicketsPurchased {
+    type: "TICKETS_PURCHASED";
+    data: {
+        raffleCategory: string;
+        raffleId: string;
+        buyer: string;
+        tickets: string[];
+        rafflePool: string;
     }
 }
 
@@ -124,7 +136,7 @@ interface DeactivateRaffle {
     deactivateRaffle: boolean;
 }
 
-type Action = Set | SetCountDown | AddUserTx | RaffleOpen | RaffleEnded | UpdateRaffleOpen | DeactivateRaffle
+type Action = Set | SetCountDown | AddUserTx | RaffleOpen | RaffleEnded | UpdateRaffleOpen | DeactivateRaffle | TicketsPurchased
 
 function reducer(state: State = INITIAL_STATE, action: Action) {
     switch (action.type) {
@@ -159,6 +171,22 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
                 ...state,
                 userTransactions,
             };
+        }
+
+        case TICKETS_PURCHASED: {
+            const {
+                data: {raffleCategory, raffleId, buyer, tickets, rafflePool},
+            } = action;
+            const categoryData = {
+                ...state.raffleCategoryData[Number(raffleCategory)],
+                raffleCategory: Number(raffleCategory),
+                rafflePool: rafflePool,
+                userTicketsPerRaffle: [ ...state.raffleCategoryData[Number(raffleCategory)].userTicketsPerRaffle, ...tickets]
+            }
+            state.raffleCategoryData[Number(raffleCategory)] = categoryData;
+            return {
+                ...state,
+            }
         }
 
         case RAFFLE_OPEN: {
@@ -236,15 +264,25 @@ interface RaffleEndedInputs {
     raffleState: string;
 }
 
+interface TicketsPurchasedInputs {
+    raffleCategory: string;
+    raffleId: string;
+    buyer: string;
+    tickets: string[];
+    rafflePool: string;
+}
+
 const RaffleContext = createContext({
     state: INITIAL_STATE,
     set: (_data: SetInputs) => {},
     setCountDown: (_data: SetCountDownInputs) => {},
     addUserTx: (_data: AddUserTxInputs) => {},
+    ticketsPurchased: (_data: TicketsPurchasedInputs) => {},
     raffleOpen: (_data: RaffleOpenInputs) => {},
     raffleEnded: (_data: RaffleEndedInputs) => {},
     updateRaffleOpen: (_data: {raffleOpen: boolean}) => {},
     deactivateRaffle: (_data: {deactivateRaffle: boolean}) => {},
+
 });
 
 export function useRaffleContext() {
@@ -273,6 +311,13 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
     function addUserTx(data: AddUserTxInputs) {
         dispatch({
             type: ADD_USER_TX,
+            data,
+        });
+    }
+
+    function ticketsPurchased(data: TicketsPurchasedInputs) {
+        dispatch({
+            type: TICKETS_PURCHASED,
             data,
         });
     }
@@ -311,6 +356,7 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
                     set,
                     setCountDown,
                     addUserTx,
+                    ticketsPurchased,
                     raffleOpen,
                     raffleEnded,
                     updateRaffleOpen,
@@ -333,6 +379,7 @@ export function Updater() {
         set,
         setCountDown,
         addUserTx,
+        ticketsPurchased,
         raffleEnded,
         raffleOpen,
     } = useRaffleContext()
@@ -376,6 +423,9 @@ export function Updater() {
                     console.error(error);
                 }else if (log) {
                     switch (log.event) {
+                        case "TicketsPurchased":
+                            ticketsPurchased(log.returnValues);
+                            break;
                         case "NewUserTransaction":
                             addUserTx(log.returnValues);
                             break;

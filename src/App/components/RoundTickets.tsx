@@ -5,7 +5,7 @@ import React, {
 
 interface props {
     setTicketModal: Dispatch<SetStateAction<boolean>>;
-    tickets: number[];
+    tickets: string[];
     raffleID: number
 }
 
