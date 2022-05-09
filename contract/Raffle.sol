@@ -1022,6 +1022,220 @@ abstract contract VRFConsumerBase is VRFRequestIDBase {
     }
 }
 
+// File: contracts/interfaces/IUniswapV2Router01.sol
+
+pragma solidity >=0.6.2;
+
+interface IUniswapV2Router01 {
+    function factory() external pure returns (address);
+
+    function WETH() external pure returns (address);
+
+    function addLiquidity(
+        address tokenA,
+        address tokenB,
+        uint256 amountADesired,
+        uint256 amountBDesired,
+        uint256 amountAMin,
+        uint256 amountBMin,
+        address to,
+        uint256 deadline
+    )
+        external
+        returns (
+            uint256 amountA,
+            uint256 amountB,
+            uint256 liquidity
+        );
+
+    function addLiquidityETH(
+        address token,
+        uint256 amountTokenDesired,
+        uint256 amountTokenMin,
+        uint256 amountETHMin,
+        address to,
+        uint256 deadline
+    )
+        external
+        payable
+        returns (
+            uint256 amountToken,
+            uint256 amountETH,
+            uint256 liquidity
+        );
+
+    function removeLiquidity(
+        address tokenA,
+        address tokenB,
+        uint256 liquidity,
+        uint256 amountAMin,
+        uint256 amountBMin,
+        address to,
+        uint256 deadline
+    ) external returns (uint256 amountA, uint256 amountB);
+
+    function removeLiquidityETH(
+        address token,
+        uint256 liquidity,
+        uint256 amountTokenMin,
+        uint256 amountETHMin,
+        address to,
+        uint256 deadline
+    ) external returns (uint256 amountToken, uint256 amountETH);
+
+    function removeLiquidityWithPermit(
+        address tokenA,
+        address tokenB,
+        uint256 liquidity,
+        uint256 amountAMin,
+        uint256 amountBMin,
+        address to,
+        uint256 deadline,
+        bool approveMax,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external returns (uint256 amountA, uint256 amountB);
+
+    function removeLiquidityETHWithPermit(
+        address token,
+        uint256 liquidity,
+        uint256 amountTokenMin,
+        uint256 amountETHMin,
+        address to,
+        uint256 deadline,
+        bool approveMax,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external returns (uint256 amountToken, uint256 amountETH);
+
+    function swapExactTokensForTokens(
+        uint256 amountIn,
+        uint256 amountOutMin,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external returns (uint256[] memory amounts);
+
+    function swapTokensForExactTokens(
+        uint256 amountOut,
+        uint256 amountInMax,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external returns (uint256[] memory amounts);
+
+    function swapExactETHForTokens(
+        uint256 amountOutMin,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external payable returns (uint256[] memory amounts);
+
+    function swapTokensForExactETH(
+        uint256 amountOut,
+        uint256 amountInMax,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external returns (uint256[] memory amounts);
+
+    function swapExactTokensForETH(
+        uint256 amountIn,
+        uint256 amountOutMin,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external returns (uint256[] memory amounts);
+
+    function swapETHForExactTokens(
+        uint256 amountOut,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external payable returns (uint256[] memory amounts);
+
+    function quote(
+        uint256 amountA,
+        uint256 reserveA,
+        uint256 reserveB
+    ) external pure returns (uint256 amountB);
+
+    function getAmountOut(
+        uint256 amountIn,
+        uint256 reserveIn,
+        uint256 reserveOut
+    ) external pure returns (uint256 amountOut);
+
+    function getAmountIn(
+        uint256 amountOut,
+        uint256 reserveIn,
+        uint256 reserveOut
+    ) external pure returns (uint256 amountIn);
+
+    function getAmountsOut(uint256 amountIn, address[] calldata path)
+        external
+        view
+        returns (uint256[] memory amounts);
+
+    function getAmountsIn(uint256 amountOut, address[] calldata path)
+        external
+        view
+        returns (uint256[] memory amounts);
+}
+
+// File: contracts/interfaces/IUniswapV2Router02.sol
+
+pragma solidity >=0.6.2;
+
+interface IUniswapV2Router02 is IUniswapV2Router01 {
+    function removeLiquidityETHSupportingFeeOnTransferTokens(
+        address token,
+        uint256 liquidity,
+        uint256 amountTokenMin,
+        uint256 amountETHMin,
+        address to,
+        uint256 deadline
+    ) external returns (uint256 amountETH);
+
+    function removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
+        address token,
+        uint256 liquidity,
+        uint256 amountTokenMin,
+        uint256 amountETHMin,
+        address to,
+        uint256 deadline,
+        bool approveMax,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external returns (uint256 amountETH);
+
+    function swapExactTokensForTokensSupportingFeeOnTransferTokens(
+        uint256 amountIn,
+        uint256 amountOutMin,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external;
+
+    function swapExactETHForTokensSupportingFeeOnTransferTokens(
+        uint256 amountOutMin,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external payable;
+
+    function swapExactTokensForETHSupportingFeeOnTransferTokens(
+        uint256 amountIn,
+        uint256 amountOutMin,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external;
+}
+
 //Lottery Contract
 
 pragma solidity >=0.8.0 <0.9.0;
@@ -1080,7 +1294,9 @@ contract Raffle is
     address public injectorAddress;
     address public treasuryAddress;
 
-    IERC20 public USDCtoken;
+    bool internal usingPolyLottoToken;
+
+    IERC20 public raffleToken;
 
     enum RaffleState {
         INACTIVE,
@@ -1094,6 +1310,11 @@ contract Raffle is
         BASIC,
         INVESTOR,
         WHALE
+    }
+
+    struct Router {
+        string Dex;
+        IUniswapV2Router02 routerAddress;
     }
 
     struct RaffleStruct {
@@ -1125,6 +1346,9 @@ contract Raffle is
         uint32 ticketNumber;
         address owner;
     }
+
+    //Router Details
+    Router public DexRouter;
 
     //Maps Total ticket Record for raffle
     mapping(RaffleCategory => mapping(uint256 => Ticket)) private ticketsRecord;
@@ -1189,6 +1413,11 @@ contract Raffle is
         _;
     }
 
+    modifier hasUpdatedToPolyLottoToken() {
+        require(usingPolyLottoToken == false, "Token has been changed already");
+        _;
+    }
+
     event AdminTokenRecovery(address token, uint256 amount);
     event RaffleOpen(
         uint256 indexed raffleId,
@@ -1247,25 +1476,35 @@ contract Raffle is
     );
     event WithdrawalComplete(uint256 raffleID, uint256 amount);
 
-    // values set are for the mumbai testnet
+    // Initializing the contract
     constructor(
         address _vrfCoordinator,
         address _link,
         bytes32 _keyHash,
         uint256 _fee,
-        address _USDCtoken
+        address _raffleToken,
+        string memory _dexname,
+        address _routerAddress,
+        uint256 _amountOfTokenPerDAI
     ) VRFConsumerBase(_vrfCoordinator, _link) {
         keyHash = _keyHash;
         fee = _fee;
         rebootChecker = 3;
-        USDCtoken = IERC20(_USDCtoken);
-        setRaffleData();
+        raffleToken = IERC20(_raffleToken);
+        DexRouter.Dex = _dexname;
+        DexRouter.routerAddress = IUniswapV2Router02(_routerAddress);
+        setTicketPrice(_amountOfTokenPerDAI);
+        usingPolyLottoToken = false;
     }
 
     // Function to be called by the chainlink keepers that start the raffle
     function startRaffle() internal stateCheck {
         //initiating raffle
         raffleID++;
+
+        if (usingPolyLottoToken) {
+            updatePrice();
+        }
 
         currentRaffleStartTime = block.timestamp;
         currentRaffleEndTime = currentRaffleStartTime + raffleInterval;
@@ -1296,18 +1535,27 @@ contract Raffle is
         );
     }
 
-    // This function sets the raffle initial data
-    function setRaffleData() internal {
+    // This function sets the raffle ticket Price
+    function setTicketPrice(uint256 _amountOfTokenPerDAI) internal {
         RaffleData storage _basicRaffleData = rafflesData[RaffleCategory.BASIC];
-        _basicRaffleData.ticketPrice = 1 * 10**18;
+        _basicRaffleData.ticketPrice = _amountOfTokenPerDAI;
 
         RaffleData storage _investorRaffleData = rafflesData[
             RaffleCategory.INVESTOR
         ];
-        _investorRaffleData.ticketPrice = 10 * 10**18;
+        _investorRaffleData.ticketPrice = 10 * _amountOfTokenPerDAI;
 
         RaffleData storage _whaleRaffleData = rafflesData[RaffleCategory.WHALE];
-        _whaleRaffleData.ticketPrice = 100 * 10**18;
+        _whaleRaffleData.ticketPrice = 100 * _amountOfTokenPerDAI;
+    }
+
+    // This function to expose the amount per ticket for each category
+    function viewTicketPrices(RaffleCategory _category)
+        external
+        view
+        returns (uint256)
+    {
+        return rafflesData[_category].ticketPrice;
     }
 
     // To help monitor the flow of the contract, this function allows the contract to change the state of each raffle
@@ -1380,7 +1628,7 @@ contract Raffle is
 
         //calculate amount to transfer
         uint256 amountToTransfer = _raffleData.ticketPrice * _tickets.length;
-        USDCtoken.safeTransferFrom(
+        raffleToken.safeTransferFrom(
             address(msg.sender),
             address(this),
             amountToTransfer
@@ -1543,7 +1791,7 @@ contract Raffle is
         uint256 amountPaidOut;
 
         for (uint256 i = 0; i < noOfWinners; i++) {
-            USDCtoken.safeTransfer(
+            raffleToken.safeTransfer(
                 _raffle.winners[i],
                 _raffle.winnersPayout[i]
             );
@@ -1552,7 +1800,10 @@ contract Raffle is
         }
 
         //Send half of remaining to Treasury
-        USDCtoken.safeTransfer(treasuryAddress, ((_raffleData.rafflePool) / 2));
+        raffleToken.safeTransfer(
+            treasuryAddress,
+            ((_raffleData.rafflePool) / 2)
+        );
 
         setRaffleState(_category, RaffleState.WAITING_FOR_REBOOT);
         rebootChecker++;
@@ -1667,7 +1918,11 @@ contract Raffle is
             "Raffle not open"
         );
 
-        USDCtoken.safeTransferFrom(address(msg.sender), address(this), _amount);
+        raffleToken.safeTransferFrom(
+            address(msg.sender),
+            address(this),
+            _amount
+        );
 
         raffles[_category][raffleID].amountInjected += _amount;
 
@@ -1730,7 +1985,7 @@ contract Raffle is
         external
         onlyOwner
     {
-        require(_tokenAddress != address(USDCtoken), "Cannot be USDC token");
+        require(_tokenAddress != address(raffleToken), "Cannot be USDC token");
 
         IERC20(_tokenAddress).safeTransfer(address(msg.sender), _tokenAmount);
 
@@ -1804,10 +2059,56 @@ contract Raffle is
         RaffleData storage _raffleData = rafflesData[_category];
         uint256 tickets = rollovers[_category][msg.sender];
         uint256 amount = tickets * _raffleData.ticketPrice;
-        USDCtoken.transfer(msg.sender, amount);
+        raffleToken.transfer(msg.sender, amount);
         rollovers[_category][msg.sender] = 0;
 
         emit WithdrawalComplete(raffleID, amount);
+    }
+
+    // Function to change the contract address of the token.
+    function updateRaffleToken(address _newTokenAddress)
+        external
+        onlyOwner
+        isRaffleDeactivated(RaffleCategory.BASIC)
+        isRaffleDeactivated(RaffleCategory.INVESTOR)
+        isRaffleDeactivated(RaffleCategory.WHALE)
+        hasUpdatedToPolyLottoToken
+    {
+        require(
+            raffleToken.balanceOf(address(this)) == 0,
+            "Token cannot be changed, remove all previous balance of old token"
+        );
+
+        raffleToken = IERC20(_newTokenAddress);
+        usingPolyLottoToken = true;
+    }
+
+    // Function to get update price of token against USDC
+
+    function updatePrice() internal {
+        address[] memory tokens = new address[](2);
+        //dai token
+        tokens[0] = 0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063;
+        //raffle token
+        tokens[1] = address(raffleToken);
+
+        // to get how many raffle tokens we get for 1 usdc token
+        uint256[] memory amounts = DexRouter.routerAddress.getAmountsOut(
+            1 ether,
+            tokens
+        );
+        // update the price
+        setTicketPrice(amounts[1]);
+    }
+
+    // Function to update Router Details
+
+    function updateRouter(string memory _dexName, address routerAddress)
+        external
+        onlyOwner
+    {
+        DexRouter.Dex = _dexName;
+        DexRouter.routerAddress = IUniswapV2Router02(routerAddress);
     }
 
     /**
