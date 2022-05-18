@@ -13,6 +13,13 @@
     border-top-right-radius: 30px;
 }
 
+.prizepot-bottom{
+    background-color: #0c192c9c;
+    padding: 1.5rem 1rem;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
 .prizepot-profit, .your-tickets{
     padding: 2rem 1.5rem;
     display: flex;
@@ -87,7 +94,9 @@
     opacity: 0.95;
 }
 .round-tickets .content{
-    padding: 1.5rem;
+    max-height: 23em;
+    padding: 1rem;
+    overflow: auto;
 }
 
 .round-tickets .btn-3{

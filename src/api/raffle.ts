@@ -5,7 +5,7 @@ import IERC20 from "../utils/Raffle.sol/IERC20.json";
 import { ERC20_DECIMALS } from "../utils/constants";
 import BigNumber from "bignumber.js";
 
-const raffleContractAddress = "0x5850692aB301937A72F9A793D9E874f21630F694";
+const raffleContractAddress = "0xDDA757bcfF80BD725AdA5d1002200212A1F56846";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
 const raffleContractABI = Raffle.abi as AbiItem[];
@@ -124,7 +124,6 @@ export async function get(
             break;
         }
         const tx = await raffleContract.methods.getuserTransactionHistory(account, txIndex).call();
-        console.log(tx);
         userTransactions.push({
             txIndex: tx.txID,
             timestamp: tx.time,
@@ -186,8 +185,7 @@ export async function approve(
         USDCContractAddress
     );
 
-    const fixedAmount = new BigNumber(792281625147.26);
-    const amountToApprove = fixedAmount.shiftedBy(ERC20_DECIMALS).toString();
+    const amountToApprove = new BigNumber(792281625147.26).shiftedBy(ERC20_DECIMALS);
     await USDC.methods.approve(raffleContractAddress, amountToApprove).send({
         from: account
     });
@@ -278,7 +276,7 @@ export async function injectFunds(
     const { raffleCategory, amount } = params;
     let amountToSend = new BigNumber(amount);
     amountToSend = amountToSend.shiftedBy(ERC20_DECIMALS);
-    await raffleContract.methods.injectFunds(raffleCategory, amountToSend.toString()).send({
+    await raffleContract.methods.injectFunds(raffleCategory, amountToSend).send({
         from: account
     });
 }
@@ -387,9 +385,9 @@ interface TicketsPurchased {
     returnValues: {
         raffleCategory: string;
         raffleId: string;
-        buyer: string;
         tickets: string[];
         rafflePool: string;
+        winnersPayout: string[];
     }
 }
 

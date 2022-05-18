@@ -97,14 +97,14 @@ const TicketSection: React.FC<TicketProps> = ({
                                     disabled={raffleCheck()}
                                 />
                                 <Button className="btn btn-edit">
-                                    {raffleCheck()? (state.currentRaffleState === "0")? (account && userConnected)? <i className="fa fa-circle-o-notch fa-spin"></i> : "Connect Wallet" : "No Tickets" :
-                                        (state.currentRaffleEndTime === "0") ? <i className="fa fa-circle-o-notch fa-spin"></i> :
+                                    {raffleCheck()? (state.currentRaffleState === "0")? (account && userConnected)? <i className="fa-solid fa-circle-notch fa-spin"></i>: "Connect Wallet" : "No Tickets" :
+                                        (state.currentRaffleEndTime === "0") ? <i className="fa-solid fa-circle-notch fa-spin"></i> :
                                         "Buy Ticket"
                                     }
                                 </Button>
                             </Form.Group>
                         </Form>   
-                        {onShow? <OrderSummary type={title} amount={amount} numOfTickets={Number(numTicket)} raffleCategory={raffleCategory} setOnShow={setOnShow} isVisible={true}/> : <></>}
+                        {onShow? <OrderSummary type={title} amount={amount} numOfTickets={Number(numTicket)} raffleCategory={raffleCategory} setOnShow={setOnShow} isVisible={true} raffleId={0}/> : <></>}
                     </div> 
                 </div>
                 {/* <div  className="ticket-img">

@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useUserContext } from "../context/user";
 import { useWeb3Context } from "../context/web3";
 import * as raffle from "../api/raffle";
 
-export function useMessage( isApproving: boolean, isBuying: boolean){
+export function useMessage( isApproving: boolean, isBuying: boolean, buyingComplete: Dispatch<SetStateAction<boolean>>){
    
     const [ message, setMessage] = useState("Checking Approval")
+
+    const [hasBought, setBought] = useState(false)
 
     const {state: { userConnected }} = useUserContext();
 
@@ -18,11 +20,18 @@ export function useMessage( isApproving: boolean, isBuying: boolean){
           const allowance = await raffle.checkAllowance(account);
 
           if(isApproving || isBuying){
-            setMessage("")
+            setMessage("");
+            if(isBuying){
+              setBought(true);
+            }
           }else if(allowance){
             setMessage("Pay Now")
           }else{
             setMessage("Approve")
+          }
+          
+          if(hasBought && !isBuying){
+            buyingComplete(true);
           }
   
         }
@@ -35,5 +44,5 @@ export function useMessage( isApproving: boolean, isBuying: boolean){
       // };
     }, [isApproving, isBuying])
 
-    return message? message : <i className="fa fa-circle-o-notch fa-spin"></i>;
+    return message? message : <i className="fa-solid fa-circle-notch fa-spin"></i>;
 }

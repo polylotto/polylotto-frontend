@@ -3,7 +3,7 @@ import "../css/prizepot.css"
 import { RoundTickets } from './RoundTickets';
 import WinningCategory from './WinningCategory';
 import { useRaffleContext } from '../../context/raffle';
-import { formatBigNumber } from '../../utils/utils';
+import { formatBigNumber, convertTime } from '../../utils/utils';
 
 interface props {
     raffleCategory: number;
@@ -30,7 +30,7 @@ const PrizePot: React.FC<props> = ({
     <div className=''>
         <div className="prizepot">
             <div className="prizepot-header">
-                <h3>Next Draw: {Number(state.currentRaffleEndTime)}</h3>
+                <h3>Next Draw: {convertTime(Number(state.currentRaffleEndTime))}</h3>
             </div>
 
             <div className="prizepot-profit">

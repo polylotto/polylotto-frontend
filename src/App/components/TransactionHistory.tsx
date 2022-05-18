@@ -30,18 +30,17 @@ const TranscHistory: React.FC<Props> = ({
                 <table>
                     <thead>
                             <tr>
-                                <th>Transaction ID</th>
-                                <th>Time</th>
+                                {/* <th>Transaction ID</th> */}
+                                {/* <th>Time</th> */}
                                 <th>Date</th>
                                 <th>Game Type</th>
-                                <th>Address</th>
                                 <th>No. Ticket</th>
                             </tr>
                         </thead>
                         <tbody>
                             {data.map(tx => (
                                 <tr key={tx.txIndex}>
-                                    <TransactionDetails txIndex={tx.txIndex} timestamp={tx.timestamp} raffleCategory={tx.raffleCategory} noOfTickets={tx.noOfTickets}/>        
+                                    <TransactionDetails timestamp={tx.timestamp} raffleCategory={tx.raffleCategory} noOfTickets={tx.noOfTickets}/>        
                                 </tr>
                             ))}                        
                         </tbody>

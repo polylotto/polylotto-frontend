@@ -1278,7 +1278,6 @@ contract Raffle is
     uint256 internal currentRaffleRebootEndTime;
 
     uint256 internal raffleID;
-    uint256 public currentTicketID;
 
     uint256 internal immutable raffleInterval = 2 * 1 hours;
     uint256 internal immutable resetInterval = 30 * 1 minutes;
@@ -1372,6 +1371,9 @@ contract Raffle is
     //Users Transaction History
     mapping(address => Transaction[]) private userTransactionHistory;
 
+    //Mapping of TicketIDs for each Raffle Category
+    mapping(RaffleCategory => uint256) private currentTicketID;
+
     modifier stateCheck() {
         require(rebootChecker == 3, "Reboot check not complete");
         _;
@@ -1428,9 +1430,9 @@ contract Raffle is
     event TicketsPurchased(
         RaffleCategory raffleCategory,
         uint256 indexed raffleId,
-        address indexed buyer,
         uint32[] tickets,
-        uint256 rafflePool
+        uint256 rafflePool,
+        uint256[] winnersPayout
     );
     event NewUserTransaction(
         uint256 txIndex,
@@ -1647,9 +1649,9 @@ contract Raffle is
         emit TicketsPurchased(
             _category,
             raffleID,
-            msg.sender,
             _tickets,
-            _raffleData.rafflePool
+            _raffleData.rafflePool,
+            _raffle.winnersPayout
         );
     }
 
@@ -1680,14 +1682,14 @@ contract Raffle is
     {
         RaffleStruct storage _raffle = raffles[_category][raffleID];
         for (uint256 n = 0; n < _tickets.length; n++) {
-            currentTicketID++;
+            currentTicketID[_category]++;
             uint32 thisTicketNumber = _tickets[n];
 
             userTicketsPerRaffle[msg.sender][_category][raffleID].push(
                 thisTicketNumber
             );
 
-            ticketsRecord[_category][currentTicketID] = Ticket({
+            ticketsRecord[_category][currentTicketID[_category]] = Ticket({
                 ticketNumber: thisTicketNumber,
                 owner: msg.sender
             });
@@ -1767,7 +1769,7 @@ contract Raffle is
         RaffleStruct storage _raffle = raffles[_category][raffleID];
 
         for (uint256 i = 0; i < noOfWinners; i++) {
-            uint256 ticketIDsBeforeCurrentRaffle = currentTicketID -
+            uint256 ticketIDsBeforeCurrentRaffle = currentTicketID[_category] -
                 _raffle.noOfTicketsSold;
 
             uint256 currentWinningTicketID = ticketIDsBeforeCurrentRaffle +
@@ -1938,7 +1940,7 @@ contract Raffle is
         if (_raffle.noOfTicketsSold < 0) {
             return;
         }
-        uint256 noOfTicketsBeforeThisRaffle = currentTicketID -
+        uint256 noOfTicketsBeforeThisRaffle = currentTicketID[_category] -
             _raffle.noOfTicketsSold;
         for (uint256 i = 1; i <= _raffle.noOfTicketsSold; i++) {
             uint256 _thisTicketID = noOfTicketsBeforeThisRaffle + i;
@@ -2103,12 +2105,13 @@ contract Raffle is
 
     // Function to update Router Details
 
-    function updateRouter(string memory _dexName, address routerAddress)
+    function updateRouter(string memory _dexName, address _routerAddress)
         external
         onlyOwner
     {
+        require(_routerAddress != address(0), "Cannot be zero address");
         DexRouter.Dex = _dexName;
-        DexRouter.routerAddress = IUniswapV2Router02(routerAddress);
+        DexRouter.routerAddress = IUniswapV2Router02(_routerAddress);
     }
 
     /**

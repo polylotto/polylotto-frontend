@@ -91,9 +91,9 @@ interface TicketsPurchased {
     data: {
         raffleCategory: string;
         raffleId: string;
-        buyer: string;
         tickets: string[];
         rafflePool: string;
+        winnersPayout: string[];
     }
 }
 
@@ -136,6 +136,7 @@ interface DeactivateRaffle {
     deactivateRaffle: boolean;
 }
 
+
 type Action = Set | SetCountDown | AddUserTx | RaffleOpen | RaffleEnded | UpdateRaffleOpen | DeactivateRaffle | TicketsPurchased
 
 function reducer(state: State = INITIAL_STATE, action: Action) {
@@ -175,17 +176,30 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
 
         case TICKETS_PURCHASED: {
             const {
-                data: {raffleCategory, raffleId, buyer, tickets, rafflePool},
+                data: {raffleCategory, raffleId, tickets, rafflePool, winnersPayout},
             } = action;
+            
+            const raffleCategoryData = [...state.raffleCategoryData]
+            
+            const currentRaffleUpdate = {
+                ...raffleCategoryData[Number(raffleCategory)].currentRaffle,
+                winnersPayout: winnersPayout,
+            }
+            const oldUserTicketsPerRaffle = raffleCategoryData[Number(raffleCategory)].userTicketsPerRaffle;
+            
             const categoryData = {
-                ...state.raffleCategoryData[Number(raffleCategory)],
+                ...raffleCategoryData[Number(raffleCategory)],
+                currentRaffle: currentRaffleUpdate,
                 raffleCategory: Number(raffleCategory),
                 rafflePool: rafflePool,
-                userTicketsPerRaffle: [ ...state.raffleCategoryData[Number(raffleCategory)].userTicketsPerRaffle, ...tickets]
+                userTicketsPerRaffle: [ ...oldUserTicketsPerRaffle, ...tickets]
             }
-            state.raffleCategoryData[Number(raffleCategory)] = categoryData;
+
+            raffleCategoryData[Number(raffleCategory)] = categoryData;
+            
             return {
                 ...state,
+                raffleCategoryData,
             }
         }
 
@@ -267,9 +281,9 @@ interface RaffleEndedInputs {
 interface TicketsPurchasedInputs {
     raffleCategory: string;
     raffleId: string;
-    buyer: string;
     tickets: string[];
     rafflePool: string;
+    winnersPayout: string[];
 }
 
 const RaffleContext = createContext({
@@ -375,7 +389,6 @@ export function Updater() {
         state: { account },
     } = useWeb3Context();
     const {
-        state,
         set,
         setCountDown,
         addUserTx,
@@ -430,6 +443,7 @@ export function Updater() {
                             addUserTx(log.returnValues);
                             break;
                         case "RaffleOpen":
+                            console.log("Open")
                             raffleOpen(log.returnValues);
                             break;
                         case "RaffleEnded":
@@ -442,7 +456,7 @@ export function Updater() {
             });
         }
             // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [state]);
+    }, [account]);
     return null;
 }
 
