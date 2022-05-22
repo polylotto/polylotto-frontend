@@ -1525,7 +1525,8 @@ contract Raffle is
             _raffle.raffleStartTime = currentRaffleStartTime;
             _raffle.raffleEndTime = currentRaffleEndTime;
 
-            setRaffleState(categoryArray[i], RaffleState.OPEN);
+            setRaffleState(_category, RaffleState.OPEN);
+            updateWinnersPayouts(_category);
         }
 
         rebootChecker = 0;
@@ -1945,9 +1946,7 @@ contract Raffle is
         for (uint256 i = 1; i <= _raffle.noOfTicketsSold; i++) {
             uint256 _thisTicketID = noOfTicketsBeforeThisRaffle + i;
             address player = ticketsRecord[_category][_thisTicketID].owner;
-            rollovers[_category][player] = userTicketsPerRaffle[player][
-                _category
-            ][raffleID].length;
+            rollovers[_category][player]++;
         }
     }
 
