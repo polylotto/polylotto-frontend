@@ -5,7 +5,7 @@ import IERC20 from "../utils/Raffle.sol/IERC20.json";
 import { ERC20_DECIMALS } from "../utils/constants";
 import BigNumber from "bignumber.js";
 
-const raffleContractAddress = "0xDDA757bcfF80BD725AdA5d1002200212A1F56846";
+const raffleContractAddress = "0xF0b415BBec832F3d5951F30685a728Efb6D311f5";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
 const raffleContractABI = Raffle.abi as AbiItem[];
