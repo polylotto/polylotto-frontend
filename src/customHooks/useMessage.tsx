@@ -44,9 +44,9 @@ export function useMessage( isApproving: boolean, isBuying: boolean, buyingCompl
       
       handleMessage();
       //eslint-disable-next-line
-      // return () => {
-      //   setMessage(""); // This worked for me
-      // };
+      return () => {
+         // This worked for me
+      };
     }, [isApproving, isBuying])
 
     return message? message : <i className="fa-solid fa-circle-notch fa-spin"></i>;
