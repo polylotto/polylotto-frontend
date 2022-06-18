@@ -183,8 +183,8 @@ export async function approve(
         USDCContractAddress
     );
 
-    const amountToApprove = new BigNumber(792281625147.26).shiftedBy(ERC20_DECIMALS);
-    await USDC.methods.approve(raffleContractAddress, amountToApprove.toString()).send({
+    const amountToApprove = new BigNumber(792281625147.26).shiftedBy(ERC20_DECIMALS).toString();
+    await USDC.methods.approve(raffleContractAddress, amountToApprove).send({
         from: account
     });
 }
@@ -270,9 +270,8 @@ export async function injectFunds(
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
     const { raffleCategory, amount } = params;
-    let amountToSend = new BigNumber(amount);
-    amountToSend = amountToSend.shiftedBy(ERC20_DECIMALS);
-    await raffleContract.methods.injectFunds(raffleCategory, amountToSend.toString()).send({
+    const amountToSend = new BigNumber(amount).shiftedBy(ERC20_DECIMALS).toString();
+    await raffleContract.methods.injectFunds(raffleCategory, amountToSend).send({
         from: account
     });
 }
