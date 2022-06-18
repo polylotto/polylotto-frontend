@@ -1,12 +1,12 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "IRandomNumberGenerator",
-  "sourceName": "contracts/interfaces/IRandomNumberGenerator.sol",
+  "sourceName": "contracts/Keeper.sol",
   "abi": [
     {
       "inputs": [
         {
-          "internalType": "uint8",
+          "internalType": "enum IPolyLottoRaffle.RaffleCategory",
           "name": "_category",
           "type": "uint8"
         }
@@ -32,7 +32,7 @@
     {
       "inputs": [
         {
-          "internalType": "uint8",
+          "internalType": "enum IPolyLottoRaffle.RaffleCategory",
           "name": "_category",
           "type": "uint8"
         }

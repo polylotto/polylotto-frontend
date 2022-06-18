@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "IPolyLottoRaffle",
-  "sourceName": "contracts/PolyLottoRaffle.sol",
+  "sourceName": "contracts/priceUpdater.sol",
   "abi": [
     {
       "inputs": [

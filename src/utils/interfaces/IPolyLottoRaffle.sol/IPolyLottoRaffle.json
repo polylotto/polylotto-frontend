@@ -51,7 +51,7 @@
           "type": "uint256"
         }
       ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -122,7 +122,7 @@
           "type": "tuple"
         }
       ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -148,6 +148,11 @@
               "type": "uint256"
             },
             {
+              "internalType": "uint256",
+              "name": "rolloverPool",
+              "type": "uint256"
+            },
+            {
               "internalType": "enum IPolyLottoRaffle.RaffleState",
               "name": "raffleState",
               "type": "uint8"
@@ -158,7 +163,7 @@
           "type": "tuple"
         }
       ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -171,7 +176,7 @@
           "type": "uint256"
         }
       ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -184,7 +189,26 @@
           "type": "uint256"
         }
       ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IPolyLottoRaffle.RaffleCategory",
+          "name": "_category",
+          "type": "uint8"
+        }
+      ],
+      "name": "getRandomGenChecker",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -197,7 +221,7 @@
           "type": "uint256"
         }
       ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -210,7 +234,7 @@
           "type": "uint256"
         }
       ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -219,11 +243,6 @@
           "internalType": "enum IPolyLottoRaffle.RaffleCategory",
           "name": "_category",
           "type": "uint8"
-        },
-        {
-          "internalType": "uint32[]",
-          "name": "_winningTicketsIDs",
-          "type": "uint32[]"
         }
       ],
       "name": "getWinners",
@@ -301,6 +320,37 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "enum IPolyLottoRaffle.RaffleCategory",
+          "name": "_category",
+          "type": "uint8"
+        },
+        {
+          "internalType": "bool",
+          "name": "_drawCompleted",
+          "type": "bool"
+        }
+      ],
+      "name": "setRaffleAsDrawn",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_amountOfTokenPerStable",
+          "type": "uint256"
+        }
+      ],
+      "name": "setTicketPrice",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "startRaffle",
       "outputs": [],
@@ -316,24 +366,6 @@
         }
       ],
       "name": "updateRaffleToken",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_dexName",
-          "type": "string"
-        },
-        {
-          "internalType": "address",
-          "name": "_routerAddress",
-          "type": "address"
-        }
-      ],
-      "name": "updateRouter",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
