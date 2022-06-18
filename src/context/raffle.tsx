@@ -396,6 +396,7 @@ export function Updater() {
         raffleEnded,
         raffleOpen,
         updateRaffleOpen,
+        deactivateRaffle,
     } = useRaffleContext()
 
 
@@ -438,8 +439,10 @@ export function Updater() {
                             addUserTx(log.returnValues);
                             break;
                         case "RaffleOpen":
+                            console.log("open")
                             raffleOpen(log.returnValues);
                             updateRaffleOpen({raffleOpen: true});
+                            deactivateRaffle({ deactivateRaffle: false})
                             break;
                         case "RaffleEnded":
                             raffleEnded(log.returnValues);
