@@ -184,7 +184,7 @@ export async function approve(
     );
 
     const amountToApprove = new BigNumber(792281625147.26).shiftedBy(ERC20_DECIMALS);
-    await USDC.methods.approve(raffleContractAddress, amountToApprove).send({
+    await USDC.methods.approve(raffleContractAddress, amountToApprove.toString()).send({
         from: account
     });
 }
@@ -272,7 +272,7 @@ export async function injectFunds(
     const { raffleCategory, amount } = params;
     let amountToSend = new BigNumber(amount);
     amountToSend = amountToSend.shiftedBy(ERC20_DECIMALS);
-    await raffleContract.methods.injectFunds(raffleCategory, amountToSend).send({
+    await raffleContract.methods.injectFunds(raffleCategory, amountToSend.toString()).send({
         from: account
     });
 }
