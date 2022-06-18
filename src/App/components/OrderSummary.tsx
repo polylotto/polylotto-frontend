@@ -48,6 +48,7 @@ export const OrderSummary: React.FC<Props> = ({type, amount, raffleCategory, num
       throw new Error("Not connected");
     }
     const tickets = generateRandomTickets(numOfTickets);
+    console.log(tickets);
     await raffle.buyTickets(account, {raffleCategory, tickets})
     // @ts-ignore
     setTickets(tickets);
@@ -72,6 +73,8 @@ export const OrderSummary: React.FC<Props> = ({type, amount, raffleCategory, num
       if(buyTickets.error){
         console.error(buyTickets.error);
       }
+    } else {
+      return;
     }
   }
     return reactDom.createPortal(
@@ -99,7 +102,7 @@ export const OrderSummary: React.FC<Props> = ({type, amount, raffleCategory, num
               <div className="flex"><h4>Total Amount</h4><h4>${amount*numOfTickets}</h4></div>
             </div>
             <>
-              <div className="mt-5"><Button className="btn" onClick={handlePay} ref={currentMessage}>{useMessage(approve.pending, buyTickets.pending, setWatcher)}</Button></div>
+              <div className="mt-5"><Button className="btn" onClick={handlePay} ref={currentMessage}>{useMessage(approve.pending, buyTickets.pending, setWatcher, setOnShow)}</Button></div>
             </>
           </StyledModal>
         </div>

@@ -7,7 +7,7 @@ import React, {
 } from "react";
 
 import { useWeb3Context } from "./web3";
-import { get as getRaffle, getCountDown, subscribe} from "../api/raffle";
+import { getRaffle, getCountDown, subscribe} from "../api/raffle";
 
 interface State {
     contractLinkBalance: string;
@@ -395,23 +395,9 @@ export function Updater() {
         ticketsPurchased,
         raffleEnded,
         raffleOpen,
+        updateRaffleOpen,
     } = useRaffleContext()
 
-
-    useEffect(() => {
-        async function getCounter(account: string) {
-            try {
-                const data = await getCountDown(account);
-                setCountDown(data);
-            }catch(error){
-                console.error(error);
-            }
-        }
-
-        if(account) {
-            getCounter(account);
-        }
-    }, [account]);
 
     useEffect(() => {
         async function get(account: string) {
@@ -421,12 +407,21 @@ export function Updater() {
             } catch (error){
                 console.error(error);
             }
-        }
+        };
 
-        if (account) {
+        async function getCounter(account: string) {
+            try {
+                const data = await getCountDown(account);
+                setCountDown(data);
+            }catch(error){
+                console.error(error);
+            }
+        };
+
+        if(account) {
+            getCounter(account);
             get(account);
         }
-            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account]);
 
     useEffect(() => {
@@ -443,8 +438,8 @@ export function Updater() {
                             addUserTx(log.returnValues);
                             break;
                         case "RaffleOpen":
-                            console.log("Open")
                             raffleOpen(log.returnValues);
+                            updateRaffleOpen({raffleOpen: true});
                             break;
                         case "RaffleEnded":
                             raffleEnded(log.returnValues);

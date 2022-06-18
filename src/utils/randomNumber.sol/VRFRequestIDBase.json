@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "VRFRequestIDBase",
+  "sourceName": "contracts/randomNumber.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212209b401659de22046bd6b320b948dc411c7b6f25b22c92671bf3e34ed3a2918c2764736f6c63430008040033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212209b401659de22046bd6b320b948dc411c7b6f25b22c92671bf3e34ed3a2918c2764736f6c63430008040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,11 +1,11 @@
 import Web3 from "web3";
 import { AbiItem } from 'web3-utils';
-import Raffle from "../utils/Raffle.sol/Raffle.json";
-import IERC20 from "../utils/Raffle.sol/IERC20.json";
+import Raffle from "../utils/PolyLottoRaffle.sol/polylottoRaffle.json";
+import IERC20 from "../utils/PolyLottoRaffle.sol/IERC20.json";
 import { ERC20_DECIMALS } from "../utils/constants";
 import BigNumber from "bignumber.js";
 
-const raffleContractAddress = "0xF0b415BBec832F3d5951F30685a728Efb6D311f5";
+const raffleContractAddress = "0x08564c19481eBE8884365aFbC30376e390DceF4D";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
 const raffleContractABI = Raffle.abi as AbiItem[];
@@ -59,20 +59,17 @@ const init_raffle: RaffleData = {
     amountInjected: "0"
 }
 
-export async function get(
+export async function getRaffle(
     account: string
 ): Promise<GetResponse> {
     //@ts-ignore
     const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-
-    // Get Link Balance
-    const contractLinkBalance = await raffleContract.methods.checkLinkBalance().call();
-
+    // Errror Function
+    const contractLinkBalance = await raffleContract.methods.getRebootEndTime().call();
     // Get current Raffle Data and Most Recent Raffle Data
-    const raffleID = await raffleContract.methods.getraffleID().call();
-
+    const raffleID = await raffleContract.methods.getRaffleID().call();
     const raffleCount = Number(raffleID) + 1;
     //looping through each category
     const raffleCategoryData: CategoryData[] = [];
@@ -83,7 +80,7 @@ export async function get(
             if (ID <= 0) {
                 break;
             }
-            const raffle = await raffleContract.methods.viewRaffle(i, ID).call();
+            const raffle = await raffleContract.methods.getRaffle(i, ID).call();
             raffles.push({
                 raffleID: raffle.ID,
                 noOfTicketSold: raffle.noOfTicketSold,
@@ -96,8 +93,10 @@ export async function get(
                 amountInjected: raffle.amountInjected
             });
         }
-        const currentRaffleState = await raffleContract.methods.getCurrentRaffleState(i).call();
-        const rafflePool = await raffleContract.methods.getRafflePool(i).call();
+        const raffleData = await raffleContract.methods.getRaffleData(i).call();
+        const currentRaffleState = raffleData.raffleState
+        // const ticketPrice = raffleData.ticketPrice;
+        const rafflePool = raffleData.rafflePool;
         const userTicketsPerRaffle = await raffleContract.methods.viewUserTickets(i, account, raffleID).call();
         raffleCategoryData.push({
             raffleCategory: i,
@@ -108,7 +107,6 @@ export async function get(
             userTicketsPerRaffle
         })
     }
-
     const _raffleState = raffleCategoryData[0].currentRaffleState || undefined;
 
     const currentRaffleState = _raffleState ? _raffleState.toString() : "0"
@@ -168,7 +166,7 @@ export async function buyTickets(
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
     const { raffleCategory, tickets } = params;
 
-    await raffleContract.methods.buyTicket(raffleCategory, tickets).send({
+    await raffleContract.methods.buyTickets(raffleCategory, tickets).send({
         from: account
     });
 }
@@ -230,16 +228,14 @@ export async function claimRollover(
     account: string,
     params: {
         raffleCategory: number;
-        ticketsToRollover: number;
-        tickets: number[];
     }
 ) {
     //@ts-ignore
     const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-    const { raffleCategory, ticketsToRollover, tickets } = params;
-    await raffleContract.methods.claimRollover(raffleCategory, ticketsToRollover, tickets).send({
+    const { raffleCategory } = params;
+    await raffleContract.methods.claimRollover(raffleCategory).send({
         from: account
     });
 }

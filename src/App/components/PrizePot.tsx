@@ -21,6 +21,7 @@ const PrizePot: React.FC<props> = ({
         ticketModal ? setTicketModal(false) : setTicketModal(true)
     }
     const {state} = useRaffleContext();
+    //@ts-ignore
     const categoryData = state.raffleCategoryData === []? 0 : state.raffleCategoryData[raffleCategory];
     const prizepot = categoryData? categoryData.rafflePool: 0;
     const tickets = categoryData? categoryData.userTicketsPerRaffle : [];

@@ -19,3 +19,17 @@ export function convertTime(secs: number) {
     let time = dateObj.toLocaleString('en-us', { hour: 'numeric', minute: 'numeric', hour12: true })
     return date + ', ' + time;
 }
+
+export function returnTimeAndDate(secs: number) {
+    if (secs === 0) {
+        return "--"
+    }
+
+    let dateObj = new Date(secs * 1000);
+
+    let date = dateObj.toLocaleDateString('en-us', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+    let time = dateObj.toLocaleString('en-us', { hour: 'numeric', minute: 'numeric', hour12: true })
+
+    return [date, time];
+}
+

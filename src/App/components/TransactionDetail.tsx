@@ -1,5 +1,5 @@
 import React from "react"
-import { convertTime } from "../../utils/utils"
+import {returnTimeAndDate } from "../../utils/utils"
 interface Props {
     timestamp: number;
     raffleCategory: number;
@@ -11,11 +11,9 @@ export const TransactionDetails: React.FC<Props> = ({
     raffleCategory,
     noOfTickets
 }) =>{
-    // const time = timestamp;
-    const date = convertTime(timestamp);
+    const date = returnTimeAndDate(timestamp);
 
     function categorise(raffleCategory: number){
-        console.log(raffleCategory);
         switch (raffleCategory.toString()) {
             case "0": 
                 return "Basic"
@@ -33,8 +31,9 @@ export const TransactionDetails: React.FC<Props> = ({
     }
     return (
         <>
-            {/* <td>{time}</td> */}
-            <td>{date}</td>
+            
+            <td>{date[0]}</td>
+            <td>{date[1]}</td>
             <td>{categorise(raffleCategory)}</td>
             <td>{noOfTickets}</td>
         </>

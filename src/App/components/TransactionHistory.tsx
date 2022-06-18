@@ -33,6 +33,7 @@ const TranscHistory: React.FC<Props> = ({
                                 {/* <th>Transaction ID</th> */}
                                 {/* <th>Time</th> */}
                                 <th>Date</th>
+                                <th>Time</th>
                                 <th>Game Type</th>
                                 <th>No. Ticket</th>
                             </tr>

@@ -3,7 +3,7 @@ import { useUserContext } from "../context/user";
 import { useWeb3Context } from "../context/web3";
 import * as raffle from "../api/raffle";
 
-export function useMessage( isApproving: boolean, isBuying: boolean, buyingComplete: Dispatch<SetStateAction<boolean>>){
+export function useMessage( isApproving: boolean, isBuying: boolean, buyingComplete: Dispatch<SetStateAction<boolean>>, toggleOff: Dispatch<SetStateAction<boolean>>){
    
     const [ message, setMessage] = useState("Checking Approval")
 
@@ -12,6 +12,10 @@ export function useMessage( isApproving: boolean, isBuying: boolean, buyingCompl
     const {state: { userConnected }} = useUserContext();
 
     const {state: {account} } = useWeb3Context();
+
+    function toggle(){
+      toggleOff(false);
+    }
 
     useEffect(()=> {
 
@@ -32,6 +36,7 @@ export function useMessage( isApproving: boolean, isBuying: boolean, buyingCompl
           
           if(hasBought && !isBuying){
             buyingComplete(true);
+            setTimeout(toggle, 5000);
           }
   
         }
