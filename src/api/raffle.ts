@@ -2,9 +2,6 @@ import Web3 from "web3";
 import { AbiItem } from 'web3-utils';
 import Raffle from "../utils/PolyLottoRaffle.sol/PolylottoRaffle.json";
 import IERC20 from "../utils/PolyLottoRaffle.sol/IERC20.json";
-import { ERC20_DECIMALS } from "../utils/constants";
-import BigNumber from "bignumber.js";
-import BN from "bn.js";
 
 const raffleContractAddress = "0x38349a22899fFd835E2237f8884D77301f324feB";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
@@ -183,11 +180,7 @@ export async function approve(
         IERC20ABI,
         USDCContractAddress
     );
-
     const amountToApprove = Web3.utils.toBN(792281625147);
-
-    // const amountToApprove = new BigNumber(792281625147.26).shiftedBy(ERC20_DECIMALS);
-    console.log(amountToApprove);
     await USDC.methods.approve(raffleContractAddress, amountToApprove).send({
         from: account
     });
@@ -274,7 +267,7 @@ export async function injectFunds(
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
     const { raffleCategory, amount } = params;
-    const amountToSend = new BigNumber(amount).shiftedBy(ERC20_DECIMALS).toString();
+    const amountToSend = Web3.utils.toBN(amount);
     await raffleContract.methods.injectFunds(raffleCategory, amountToSend).send({
         from: account
     });
