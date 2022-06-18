@@ -1,11 +1,11 @@
 import Web3 from "web3";
 import { AbiItem } from 'web3-utils';
-import Raffle from "../utils/PolyLottoRaffle.sol/polylottoRaffle.json";
+import Raffle from "../utils/PolyLottoRaffle.sol/PolylottoRaffle.json";
 import IERC20 from "../utils/PolyLottoRaffle.sol/IERC20.json";
 import { ERC20_DECIMALS } from "../utils/constants";
 import BigNumber from "bignumber.js";
 
-const raffleContractAddress = "0x08564c19481eBE8884365aFbC30376e390DceF4D";
+const raffleContractAddress = "0x38349a22899fFd835E2237f8884D77301f324feB";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 
 const raffleContractABI = Raffle.abi as AbiItem[];
