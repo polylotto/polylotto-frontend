@@ -29,7 +29,7 @@ export const RoundTickets: React.FC<props> = ({setTicketModal, tickets, raffleID
                                 #{ticket}
                             </p>
                         ))  
-                        : <p style={{color: "black", textAlign: "center", fontSize: "2rem", marginTop: "3rem", opacity: "0.7", wordWrap: "break-word"}}>No Ticket</p>
+                        : <p style={{color: "black", textAlign: "center", fontSize: "2rem", marginTop: "1.5rem", opacity: "0.7", wordWrap: "break-word"}}>No Ticket</p>
 
                     }
                 </div>

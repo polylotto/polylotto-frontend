@@ -1,4 +1,6 @@
 import polyLotto from "../images/polylotto-logo-white.png";
+import { addToken } from "../../api/web3";
+
 export const Footer = ()=>{
 
     return (
@@ -24,7 +26,7 @@ export const Footer = ()=>{
                 <div>
                     <small>developers</small>
                     <ul>
-                        <li><a href="/#">github</a></li>
+                        <li><a href="https://github.com/JoE11-y/raffle">github</a></li>
                         <li><a href="/#">documentation</a></li>
                         <li><a href="/#">audits</a></li>
                         <li><a href="/#">careers</a></li>
@@ -37,6 +39,7 @@ export const Footer = ()=>{
             <hr />
             <div className="container buy-token">
                 <a href="/coming" className="btn-3">Buy Token &#8594;</a>
+                <a onClick={addToken} href="#/" className="btn-3">Add Token &#8594;</a>
             </div>
         </footer>
     );

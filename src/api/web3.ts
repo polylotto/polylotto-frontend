@@ -1,3 +1,8 @@
+const tokenAddress = '0xe75613bc32e3ec430aDbD46D8dDf44C2b7F82071';
+const tokenSymbol = 'TestUSDT';
+const tokenDecimals = 18;
+const tokenImage = '';
+
 export async function connectWalletMetamask() {
     //@ts-ignore
     const { ethereum } = window;
@@ -100,4 +105,30 @@ export async function subscribeToChainID() {
 
 }
 
+export async function addToken() {
+    // @ts-ignore
+    const { ethereum } = window;
+    try {
+        const wasAdded = await ethereum.request({
+            method: 'wallet_watchAsset',
+            params: {
+                type: 'ERC20',
+                options: {
+                    address: tokenAddress,
+                    symbol: tokenSymbol,
+                    decimals: tokenDecimals,
+                    image: tokenImage,
+                },
+            },
+        });
+
+        if (wasAdded) {
+            console.log('Success!');
+        } else {
+            console.log('Not Added');
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
 
