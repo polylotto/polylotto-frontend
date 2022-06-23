@@ -9,7 +9,8 @@ import background from "../images/SVGPolylogo.svg";
 import { useRaffleContext } from "../../context/raffle";
 import {useWeb3Context} from "../../context/web3";
 import {useUserContext} from "../../context/user";
-import PrizePot from "./PrizePot"
+import PrizePot from "./PrizePot";
+import Slideshow from "./slider";
 
 // import { OrderSummary } from "./OrderSummary2"
 
@@ -112,6 +113,7 @@ const TicketSection: React.FC<TicketProps> = ({
                 </div> */}
             </div>
             <PrizePot raffleCategory={raffleCategory}/>
+            {/* <Slideshow raffle={state.raffles} /> */}
         </>
     );
 }

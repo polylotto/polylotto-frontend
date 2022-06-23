@@ -22,19 +22,6 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "enum IPolyLottoRaffle.RaffleCategory",
-          "name": "_category",
-          "type": "uint8"
-        }
-      ],
-      "name": "claimRollover",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [],
       "name": "deactivateRaffle",
       "outputs": [],
@@ -145,11 +132,6 @@
             {
               "internalType": "uint256",
               "name": "rafflePool",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "rolloverPool",
               "type": "uint256"
             },
             {
@@ -276,19 +258,6 @@
           "type": "uint8"
         }
       ],
-      "name": "manualRefund",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "enum IPolyLottoRaffle.RaffleCategory",
-          "name": "_category",
-          "type": "uint8"
-        }
-      ],
       "name": "payoutWinners",
       "outputs": [],
       "stateMutability": "nonpayable",
@@ -307,11 +276,6 @@
           "internalType": "enum IPolyLottoRaffle.RaffleCategory",
           "name": "_category",
           "type": "uint8"
-        },
-        {
-          "internalType": "bool",
-          "name": "_deactivated",
-          "type": "bool"
         }
       ],
       "name": "rollover",
@@ -366,19 +330,6 @@
         }
       ],
       "name": "updateRaffleToken",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "enum IPolyLottoRaffle.RaffleCategory",
-          "name": "_category",
-          "type": "uint8"
-        }
-      ],
-      "name": "withdrawFundsDueToDeactivation",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

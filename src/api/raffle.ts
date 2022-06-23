@@ -5,7 +5,7 @@ import IERC20 from "../utils/PolyLottoRaffle.sol/IERC20.json";
 import { ERC20_DECIMALS } from "../utils/constants";
 import BN from "bn.js"
 
-const raffleContractAddress = "0x38349a22899fFd835E2237f8884D77301f324feB";
+const raffleContractAddress = "0xb6346F7e92E8aB3a8ECb8240ab9B40243015eBb8";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 const ercdecimal = new BN(10).pow(new BN(ERC20_DECIMALS));
 
@@ -18,7 +18,9 @@ interface Transaction {
     timestamp: number;
     raffleCategory: number;
     noOfTickets: number;
+    description: string;
 }
+
 interface RaffleData {
     raffleID: number;
     noOfTicketSold: number;
@@ -128,7 +130,8 @@ export async function getRaffle(
             txIndex: tx.txID,
             timestamp: tx.time,
             raffleCategory: tx.raffleCategory,
-            noOfTickets: tx.noOfTickets
+            noOfTickets: tx.noOfTickets,
+            description: tx.description
         });
     }
     return {
@@ -394,6 +397,7 @@ interface NewUserTransaction {
         timestamp: number;
         raffleCategory: number;
         noOfTickets: number;
+        description: string;
     }
 }
 

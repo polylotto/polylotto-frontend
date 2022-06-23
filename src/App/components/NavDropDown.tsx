@@ -37,6 +37,7 @@ interface Transaction {
     timestamp: number;
     raffleCategory: number;
     noOfTickets: number;
+    description: string;
 }
 
 interface SetInputs {

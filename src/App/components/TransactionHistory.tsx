@@ -10,6 +10,7 @@ interface Transaction {
     timestamp: number;
     raffleCategory: number;
     noOfTickets: number;
+    description: string;
 }
 
 interface Props {
@@ -35,13 +36,14 @@ const TranscHistory: React.FC<Props> = ({
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Game Type</th>
+                                <th>Description</th>
                                 <th>No. Ticket</th>
                             </tr>
                         </thead>
                         <tbody>
                             {data.map(tx => (
                                 <tr key={tx.txIndex}>
-                                    <TransactionDetails timestamp={tx.timestamp} raffleCategory={tx.raffleCategory} noOfTickets={tx.noOfTickets}/>        
+                                    <TransactionDetails timestamp={tx.timestamp} raffleCategory={tx.raffleCategory} description={tx.description} noOfTickets={tx.noOfTickets}/>        
                                 </tr>
                             ))}                        
                         </tbody>

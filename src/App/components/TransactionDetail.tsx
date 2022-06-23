@@ -4,12 +4,14 @@ interface Props {
     timestamp: number;
     raffleCategory: number;
     noOfTickets: number;
+    description: string;
 }
 
 export const TransactionDetails: React.FC<Props> = ({
     timestamp,
     raffleCategory,
-    noOfTickets
+    noOfTickets,
+    description
 }) =>{
     const date = returnTimeAndDate(timestamp);
 
@@ -35,6 +37,7 @@ export const TransactionDetails: React.FC<Props> = ({
             <td>{date[0]}</td>
             <td>{date[1]}</td>
             <td>{categorise(raffleCategory)}</td>
+            <td>{description}</td>
             <td>{noOfTickets}</td>
         </>
     );

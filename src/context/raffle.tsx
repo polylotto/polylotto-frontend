@@ -26,7 +26,9 @@ interface Transaction {
     timestamp: number;
     raffleCategory: number;
     noOfTickets: number;
+    description: string;
 }
+
 interface RaffleData {
     raffleID: number;
     noOfTicketSold: number;
@@ -104,6 +106,7 @@ interface AddUserTx {
         timestamp: number;
         raffleCategory: number;
         noOfTickets: number;
+        description: string;
     }
 }
 
@@ -155,7 +158,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
         }
         case ADD_USER_TX: {
             const {
-                data: { txIndex, timestamp, raffleCategory, noOfTickets},
+                data: { txIndex, timestamp, raffleCategory, noOfTickets, description},
             } = action;
 
             const userTransactions = [
@@ -164,6 +167,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
                     timestamp,
                     raffleCategory,
                     noOfTickets,
+                    description,
                 },
                 ...state.userTransactions,
             ];
@@ -263,6 +267,7 @@ interface AddUserTxInputs {
     timestamp: number;
     raffleCategory: number;
     noOfTickets: number;
+    description: string;
 }
 
 interface RaffleOpenInputs {
@@ -439,7 +444,6 @@ export function Updater() {
                             addUserTx(log.returnValues);
                             break;
                         case "RaffleOpen":
-                            console.log("open")
                             raffleOpen(log.returnValues);
                             updateRaffleOpen({raffleOpen: true});
                             deactivateRaffle({ deactivateRaffle: false})
