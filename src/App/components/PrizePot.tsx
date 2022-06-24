@@ -44,7 +44,7 @@ const PrizePot: React.FC<props> = ({
             <div className="your-tickets">
                 <h2>Your Tickets</h2>
                 <div>
-                    <p>You have {tickets.length} ticket this round</p>
+                    <p>You have {tickets.length} ticket(s) this round</p>
                     <a href=" /#" style={{color: "var(--main-color)" }} onClick={handleTicketModal}>View your tickets</a>
                 </div>
             </div>

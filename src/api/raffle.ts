@@ -5,7 +5,7 @@ import IERC20 from "../utils/PolyLottoRaffle.sol/IERC20.json";
 import { ERC20_DECIMALS } from "../utils/constants";
 import BN from "bn.js"
 
-const raffleContractAddress = "0xb6346F7e92E8aB3a8ECb8240ab9B40243015eBb8";
+const raffleContractAddress = "0xfA7072Dc609265b36550694720Ffa0787E85B6F9";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 const ercdecimal = new BN(10).pow(new BN(ERC20_DECIMALS));
 
