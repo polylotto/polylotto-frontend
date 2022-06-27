@@ -77,6 +77,7 @@ export async function subscribeToChainID() {
     } catch (switchError) {
         // This error code indicates that the chain has not been added to MetaMask.
         // @ts-ignore
+        //https://matic-testnet-archive-rpc.bwarelabs.com
         if (switchError.code === 4902) {
             try {
                 // @ts-ignore
