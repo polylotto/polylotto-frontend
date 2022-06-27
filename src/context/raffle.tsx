@@ -13,12 +13,11 @@ interface State {
     contractLinkBalance: string;
     currentRaffleEndTime: string;
     currentRaffleRebootEndTime: string;
-    currentRaffleState: string;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[];
     raffleOpen: boolean;
     deactivateRaffle: boolean;
-    raffleStateMessage: string;
+    raffleState: string;
 }
 
 interface Transaction {
@@ -53,12 +52,11 @@ const INITIAL_STATE: State = {
     contractLinkBalance: "0",
     currentRaffleEndTime: "0",
     currentRaffleRebootEndTime: "0",
-    currentRaffleState: "0",
     raffleCategoryData: [],
     userTransactions: [],
     raffleOpen: false,
     deactivateRaffle: false,
-    raffleStateMessage: "",
+    raffleState: "0",
 }
 
 const SET = "SET";
@@ -74,7 +72,6 @@ interface Set {
     type: "SET";
     data: {
         contractLinkBalance: string;
-        currentRaffleState: string;
         raffleCategoryData: CategoryData[];
         userTransactions: Transaction[]
     }
@@ -85,6 +82,7 @@ interface SetCountDown {
     data: {
         currentRaffleEndTime: string;
         currentRaffleRebootEndTime: string;
+        raffleState: string;
     }
 }
 
@@ -215,7 +213,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
                 ...state,
                 currentRaffleEndTime: endTime,
                 currentRaffleRebootEndTime: rebootTime,
-                currentRaffleState: raffleState,
+                raffleState: raffleState,
             };
         }
 
@@ -225,7 +223,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
             } = action
             return {
                 ...state,
-                currentRaffleState: raffleState,
+                raffleState: raffleState,
             };
         }
 
@@ -252,7 +250,6 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
 
 interface SetInputs {
     contractLinkBalance: string;
-    currentRaffleState: string;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[]
 }
@@ -260,6 +257,7 @@ interface SetInputs {
 interface SetCountDownInputs {
     currentRaffleEndTime: string;
     currentRaffleRebootEndTime: string;
+    raffleState: string;
 }
 
 interface AddUserTxInputs {

@@ -10,9 +10,11 @@ import { useRaffleContext } from "../../context/raffle";
 import {useWeb3Context} from "../../context/web3";
 import {useUserContext} from "../../context/user";
 import PrizePot from "./PrizePot";
-import Slideshow from "./slider";
+import Slideshow from "./Slideshow";
 
 // import { OrderSummary } from "./OrderSummary2"
+
+
 
 interface TicketProps {
     title: string;
@@ -67,7 +69,7 @@ const TicketSection: React.FC<TicketProps> = ({
     const nonActiveStates = ["0","5"];
     
     function raffleCheck(){
-        if(nonActiveStates.includes(state.currentRaffleState) || state.deactivateRaffle){
+        if(nonActiveStates.includes(state.raffleState) || state.deactivateRaffle){
             return true;
         }else{
             return false;
@@ -98,7 +100,7 @@ const TicketSection: React.FC<TicketProps> = ({
                                     disabled={raffleCheck()}
                                 />
                                 <Button className="btn btn-edit">
-                                    {raffleCheck()? (state.currentRaffleState === "0")? (account && userConnected)? <i className="fa-solid fa-circle-notch fa-spin"></i>: "Connect Wallet" : "No Tickets" :
+                                    {raffleCheck()? (state.raffleState === "0")? (account && userConnected)? <i className="fa-solid fa-circle-notch fa-spin"></i>: "Connect Wallet" : "No Tickets" :
                                         (state.currentRaffleEndTime === "0") ? <i className="fa-solid fa-circle-notch fa-spin"></i> :
                                         "Buy Ticket"
                                     }
@@ -113,7 +115,7 @@ const TicketSection: React.FC<TicketProps> = ({
                 </div> */}
             </div>
             <PrizePot raffleCategory={raffleCategory}/>
-            {/* <Slideshow raffle={state.raffles} /> */}
+            {/* <Slideshow raffleCategory={raffleCategory}/> */}
         </>
     );
 }

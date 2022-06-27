@@ -15,7 +15,7 @@ export const CountdownDeactivated: React.FC<Props> =()=>{
     const { state: { account } } = useWeb3Context();
     return (
         <>  
-            <h4 className="center mt-5">{!(account && userConnected)? "Connect Wallet to use DApp!" : state.currentRaffleState === "0" ? "Ticket sales loading..." : "No Ticket Sales At the Moment!" }</h4>
+            <h4 className="center mt-5">{!(account && userConnected)? "Connect Wallet to use DApp!" : state.raffleState === "0" ? "Ticket sales loading..." : "No Ticket Sales At the Moment!" }</h4>
             <div className="countdown-timer">
                 <Time hour={0} minute={0} second={0} />
             </div>

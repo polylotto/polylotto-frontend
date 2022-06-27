@@ -42,13 +42,13 @@ interface CategoryData {
 }
 interface GetResponse {
     contractLinkBalance: string;
-    currentRaffleState: string;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[]
 }
 interface CountDown {
     currentRaffleEndTime: string;
     currentRaffleRebootEndTime: string;
+    raffleState: string;
 }
 
 const init_raffle: RaffleData = {
@@ -111,9 +111,9 @@ export async function getRaffle(
             userTicketsPerRaffle
         })
     }
-    const _raffleState = raffleCategoryData[0].currentRaffleState || undefined;
+    // const _raffleState = raffleCategoryData[0].currentRaffleState || undefined;
 
-    const currentRaffleState = _raffleState ? _raffleState.toString() : "0"
+    // const currentRaffleState = _raffleState ? _raffleState.toString() : "0"
 
     // Get User Transaction History
     const transactionCount = await raffleContract.methods.getUserTransactionCount(account).call();
@@ -136,7 +136,6 @@ export async function getRaffle(
     }
     return {
         contractLinkBalance: contractLinkBalance,
-        currentRaffleState: currentRaffleState,
         raffleCategoryData: raffleCategoryData,
         userTransactions: userTransactions,
     };
@@ -151,10 +150,13 @@ export async function getCountDown(
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
     const currentRaffleEndTime = await raffleContract.methods.getRaffleEndTime().call();
     const currentRaffleRebootEndTime = await raffleContract.methods.getRebootEndTime().call();
+    const basic = 1;
+    const raffleData = await raffleContract.methods.getRaffleData(basic).call();
 
     return {
         currentRaffleEndTime,
-        currentRaffleRebootEndTime
+        currentRaffleRebootEndTime,
+        raffleState: raffleData.raffleState
     }
 }
 
@@ -226,22 +228,6 @@ export async function viewRollovers(
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
     const rollover = await raffleContract.methods.viewUserRollovers(raffleCategory, account).call();
     return rollover;
-}
-
-export async function claimRollover(
-    account: string,
-    params: {
-        raffleCategory: number;
-    }
-) {
-    //@ts-ignore
-    const { ethereum } = window;
-    const web3 = new Web3(ethereum);
-    const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-    const { raffleCategory } = params;
-    await raffleContract.methods.claimRollover(raffleCategory).send({
-        from: account
-    });
 }
 
 export async function recoverWrongTokens(
@@ -328,24 +314,6 @@ export async function reactivateRaffle(
 
 
 }
-
-export async function withdrawFundsDueToDeactivation(
-    account: string,
-    params: {
-        raffleCategory: number
-    }
-) {
-    //@ts-ignore
-    const { ethereum } = window;
-    const web3 = new Web3(ethereum);
-    const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-    const { raffleCategory } = params;
-
-    await raffleContract.methods.withdrawFundsDueToDeactivation(raffleCategory).send({
-        from: account
-    })
-}
-
 
 
 //Set Events

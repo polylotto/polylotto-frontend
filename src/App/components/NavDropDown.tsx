@@ -42,9 +42,6 @@ interface Transaction {
 
 interface SetInputs {
     contractLinkBalance: string;
-    currentRaffleEndTime: string;
-    currentRaffleRebootEndTime: string;
-    currentRaffleState: string;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[]
 }
@@ -53,9 +50,6 @@ const NavDropDown: React.FC<Props> = () =>{
 
     const INITIAL_STATE: SetInputs = {
         contractLinkBalance: "0",
-        currentRaffleEndTime: "0",
-        currentRaffleRebootEndTime: "0",
-        currentRaffleState: "0",
         raffleCategoryData: [],
         userTransactions: []
     }
