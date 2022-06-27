@@ -11,6 +11,8 @@
     padding: 1.5rem 1rem;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
+    display: flex;
+    align-content: center;
 }
 
 .prizepot-bottom{
@@ -26,6 +28,9 @@
     align-items: center;
 }
 
+.skel {
+    margin-left: 7rem;
+}
 .prizepot-profit div, .your-tickets div{
     margin-left: 4rem;
 }

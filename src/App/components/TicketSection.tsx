@@ -11,7 +11,7 @@ import {useWeb3Context} from "../../context/web3";
 import {useUserContext} from "../../context/user";
 import PrizePot from "./PrizePot";
 import Slideshow from "./Slideshow";
-
+import SkeletonPrizepot from "../Skeletons/SkeletonPrizepot";
 // import { OrderSummary } from "./OrderSummary2"
 
 
@@ -35,7 +35,7 @@ const TicketSection: React.FC<TicketProps> = ({
     const { state: { account }, updateAccount } = useWeb3Context();
 
     const {
-        state: { userConnected },
+        state: { userConnected, fetchComplete },
         updateConnection,
     } = useUserContext();
 
@@ -114,7 +114,7 @@ const TicketSection: React.FC<TicketProps> = ({
                     <img src={background} alt="" />
                 </div> */}
             </div>
-            <PrizePot raffleCategory={raffleCategory}/>
+            {fetchComplete? <PrizePot raffleCategory={raffleCategory}/> : <SkeletonPrizepot />}           
             {/* <Slideshow raffleCategory={raffleCategory}/> */}
         </>
     );

@@ -8,6 +8,7 @@ import React, {
 
 import { useWeb3Context } from "./web3";
 import { getRaffle, getCountDown, subscribe} from "../api/raffle";
+import {useUserContext} from "./user";
 
 interface State {
     currentRaffleEndTime: string;
@@ -387,6 +388,8 @@ export function Updater() {
     const {
         state: { account },
     } = useWeb3Context();
+
+    const { updateFetchStatus } = useUserContext();
     const {
         set,
         setCountDown,
@@ -404,6 +407,7 @@ export function Updater() {
             try {
                 const data = await getRaffle(account);
                 set(data);
+                updateFetchStatus({fetchComplete:true})
             } catch (error){
                 console.error(error);
             }

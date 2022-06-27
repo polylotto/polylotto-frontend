@@ -42,7 +42,7 @@ interface CategoryData {
 }
 interface GetResponse {
     raffleCategoryData: CategoryData[];
-    userTransactions: Transaction[]
+    userTransactions: Transaction[];
 }
 interface CountDown {
     currentRaffleEndTime: string;

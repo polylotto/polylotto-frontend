@@ -8,11 +8,13 @@ import React, {
 
 interface State {
     userConnected: boolean | null;
+    fetchComplete: boolean;
 }
 
 
 const INITIAL_STATE: State = {
-    userConnected: false
+    userConnected: false,
+    fetchComplete: false
 };
 
 function getLocalStorage(){
@@ -42,17 +44,24 @@ function setLocalStorage(userConnected: Boolean | null){
 
 
 const LOCAL_STATE: State = {
-    userConnected: getLocalStorage()
+    userConnected: getLocalStorage(),
+    fetchComplete: false
 }
 
 const UPDATE_CONNECTION = "UPDATE_CONNECTION";
+
+const UPDATE_FETCH_STATUS = "UPDATE_FETCH_STATUS"
 
 interface UpdateConnection {
     type: "UPDATE_CONNECTION";
     userConnected: boolean;
 }
+interface UpdateFetchStatus {
+    type: "UPDATE_FETCH_STATUS";
+    fetchComplete: boolean;
+}
 
-type Action = UpdateConnection;
+type Action = UpdateConnection | UpdateFetchStatus;
 
 function reducer(state: State = LOCAL_STATE || INITIAL_STATE, action: Action) {
     switch (action.type) {
@@ -63,6 +72,13 @@ function reducer(state: State = LOCAL_STATE || INITIAL_STATE, action: Action) {
                 userConnected,
             };
         }
+        case UPDATE_FETCH_STATUS: {
+            const {fetchComplete} = action;
+            return {
+                ...state,
+                fetchComplete,
+            };
+        }
         default:
             return state;
     }
@@ -71,6 +87,7 @@ function reducer(state: State = LOCAL_STATE || INITIAL_STATE, action: Action) {
 const UserContext = createContext({
     state: LOCAL_STATE || INITIAL_STATE,
     updateConnection: (_data: {userConnected: boolean}) => {},
+    updateFetchStatus: (_data: {fetchComplete: boolean}) => {},
 });
 
 
@@ -89,6 +106,12 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
             ...data,
         });
     }
+    function updateFetchStatus(data: {fetchComplete: boolean}) {
+        dispatch({
+            type: UPDATE_FETCH_STATUS,
+            ...data,
+        });
+    }
 
     useEffect(() =>{
         setLocalStorage(state.userConnected)
@@ -100,6 +123,7 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
           () => ({
             state,
             updateConnection,
+            updateFetchStatus,
           }),
           [state]
         )}
