@@ -10,7 +10,6 @@ import { useWeb3Context } from "./web3";
 import { getRaffle, getCountDown, subscribe} from "../api/raffle";
 
 interface State {
-    contractLinkBalance: string;
     currentRaffleEndTime: string;
     currentRaffleRebootEndTime: string;
     raffleCategoryData: CategoryData[];
@@ -49,7 +48,6 @@ interface CategoryData {
 }
 
 const INITIAL_STATE: State = {
-    contractLinkBalance: "0",
     currentRaffleEndTime: "0",
     currentRaffleRebootEndTime: "0",
     raffleCategoryData: [],
@@ -71,7 +69,6 @@ const TICKETS_PURCHASED = "TICKETS_PURCHASED";
 interface Set {
     type: "SET";
     data: {
-        contractLinkBalance: string;
         raffleCategoryData: CategoryData[];
         userTransactions: Transaction[]
     }
@@ -249,7 +246,6 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
 }
 
 interface SetInputs {
-    contractLinkBalance: string;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[]
 }

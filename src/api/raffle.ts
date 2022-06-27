@@ -41,7 +41,6 @@ interface CategoryData {
     userTicketsPerRaffle: string[];
 }
 interface GetResponse {
-    contractLinkBalance: string;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[]
 }
@@ -70,8 +69,6 @@ export async function getRaffle(
     const { ethereum } = window;
     const web3 = new Web3(ethereum);
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-    // Errror Function
-    const contractLinkBalance = await raffleContract.methods.getRebootEndTime().call();
     // Get current Raffle Data and Most Recent Raffle Data
     const raffleID = await raffleContract.methods.getRaffleID().call();
     const raffleCount = Number(raffleID) + 1;
@@ -135,7 +132,6 @@ export async function getRaffle(
         });
     }
     return {
-        contractLinkBalance: contractLinkBalance,
         raffleCategoryData: raffleCategoryData,
         userTransactions: userTransactions,
     };

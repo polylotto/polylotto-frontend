@@ -41,17 +41,22 @@ interface Transaction {
 }
 
 interface SetInputs {
-    contractLinkBalance: string;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[]
 }
 
+
 const NavDropDown: React.FC<Props> = () =>{
 
     const INITIAL_STATE: SetInputs = {
-        contractLinkBalance: "0",
         raffleCategoryData: [],
         userTransactions: []
+    }
+
+    const SET_COUNTDOWN = {
+        currentRaffleEndTime: "0",
+        currentRaffleRebootEndTime: "0",
+        raffleState: "0"
     }
 
     const {
@@ -63,7 +68,7 @@ const NavDropDown: React.FC<Props> = () =>{
         updateConnection,
     } = useUserContext();
 
-    const { state, set } = useRaffleContext();
+    const { state, set, setCountDown } = useRaffleContext();
 
     const [navOptionsState, setNavOptionsState] = useState(false);
     const [transcState, setTranscState] = useState(false);
@@ -88,6 +93,7 @@ const NavDropDown: React.FC<Props> = () =>{
         updateConnection({userConnected: false});
         updateAccount({account: ""});
         set(INITIAL_STATE);
+        setCountDown(SET_COUNTDOWN);
     }
 
     const toggleOff = (e: React.MouseEvent<HTMLAnchorElement>)=>{
