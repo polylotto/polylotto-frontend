@@ -87,7 +87,7 @@ export async function subscribeToChainID() {
                         {
                             chainId: '0x13881',
                             chainName: 'Mumbai Testnet',
-                            rpcUrls: ['https://rpc-mumbai.matic.today'],
+                            rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
                             nativeCurrency: {
                                 name: "MATIC",
                                 symbol: "MATIC", // 2-6 characters long
