@@ -39,7 +39,7 @@ export const Footer = ()=>{
             <hr />
             <div className="container buy-token">
                 {/* <a href="/coming" className="btn-3">Buy Token &#8594;</a> */}
-                <a href="https://polylotto-faucet.vercel.app/" className="btn-3"> Get Token &#8594;</a>
+                <a href="https://polylotto-faucet.vercel.app/" target="_blank" rel="noopener noreferrer" className="btn-3"> Get Token &#8594;</a>
                 <a onClick={addToken} href="#/" className="btn-3">Add Token &#8594;</a>
             </div>
         </footer>
