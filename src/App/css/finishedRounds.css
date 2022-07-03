@@ -1,0 +1,33 @@
+.finished-rounds_header {
+	background-color: #0c192c9c;
+	padding: 1.5rem 1rem;
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
+}
+
+.finished-rounds_header .rounds {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.round-num {
+	display: inline-block;
+	background-color: #1c3b68;
+	font-size: 1rem;
+	margin-left: 0.2rem;
+	padding: 0.4rem 0.7rem;
+	border-radius: 10px;
+}
+
+.rounds-nav {
+	margin-right: 2rem;
+	font-size: 2rem;
+	width: 5rem;
+	display: flex;
+	justify-content: space-between;
+}
+
+.rounds-nav span {
+	cursor: pointer;
+}

@@ -1,0 +1,72 @@
+.winning-number {
+	padding: 1rem 0.5rem 0.5rem 1.5rem;
+	display: flex;
+	align-items: center;
+	font-weight: bold;
+}
+
+.winning-number .category {
+	margin-right: 4rem;
+}
+
+.winning-number .digit {
+	display: inline-block;
+	margin: 0.25rem;
+	width: 6vmax;
+	height: 6vmax;
+	border-radius: 100%;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2rem;
+	position: relative;
+}
+
+.winning-number .digit::after {
+	content: "";
+	position: absolute;
+	top: 10%;
+	left: 15%;
+	border-radius: 100%;
+	background-color: rgba(245, 245, 220, 0.363);
+	width: 1.5rem;
+	height: 0.5rem;
+	transform: rotate(-30deg);
+}
+
+.winning-numbers {
+	position: relative;
+	overflow: hidden;
+}
+.winning-numbers_status {
+	position: absolute;
+	font-size: 1.2rem;
+	text-transform: capitalize;
+	top: 3rem;
+	right: -4rem;
+	background-color: #43aa8b;
+	padding: 0.5rem 5rem;
+	transform: rotate(50deg);
+}
+
+@media (max-width: 700px) {
+	.winning-number .digit {
+		font-size: 0.8rem;
+		width: 1.7rem;
+		height: 1.7rem;
+	}
+	.winning-number .digit::after {
+		width: 0.6rem;
+		height: 0.2rem;
+	}
+	.winning-numbers_status {
+		position: relative;
+		font-size: 1.2rem;
+		text-transform: capitalize;
+		top: 0rem;
+		right: 0rem;
+		background-color: #43aa8b;
+		padding: 0.5rem 1rem;
+		transform: rotate(0deg);
+	}
+}
