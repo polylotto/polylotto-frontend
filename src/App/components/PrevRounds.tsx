@@ -7,9 +7,10 @@ import { convertTime } from "../../utils/utils";
 import { getRaffle } from "../../api/raffle";
 import { WinningNumbers } from "./WinningNumbers";
 
-interface RaffleData {
+
+type RaffleData = {
     ID: number;
-    noOfTicketSold: number;
+    noOfTicketsSold: number;
     noOfPlayers: string;
     winners: string[];
     winningTickets: string[];
@@ -18,15 +19,6 @@ interface RaffleData {
     raffleEndTime: string;
     amountInjected: string;
 }
-  
-interface CategoryData {
-    raffleCategory: number;
-    rafflePool: string;
-    currentRaffleState: string;
-    currentRaffle: RaffleData;
-    mostRecentRaffles: RaffleData[];
-    userTicketsPerRaffle: string[];
-  }
 
 interface props {
 	raffleCategory: number;
@@ -34,7 +26,7 @@ interface props {
 const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 	const INITIAL_STATE: RaffleData = {
         ID: 0,
-        noOfTicketSold: 0,
+        noOfTicketsSold: 0,
         noOfPlayers: "",
         winners: ["0x","0x","0x"],
         winningTickets: ["000000","000000","000000"],
@@ -53,21 +45,23 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 	const categoryData = state.raffleCategoryData === []
 			? 0
 			: state.raffleCategoryData[raffleCategory];
-	const raffle : RaffleData = categoryData ? categoryData.prevRaffleData : INITIAL_STATE;
-	const [raffleID, setRaffleID] = useState(raffle.ID);
-	const [raffleRequestData, setRaffle] = useState({});
+	const _raffle : RaffleData = categoryData ? categoryData.prevRaffleData : INITIAL_STATE;
+	const [raffleId, setRaffleID] = useState(_raffle.ID);
+	const [raffle, setRaffle] = useState(_raffle);
 
 	const nextRaffle = async (e: React.MouseEvent<HTMLAnchorElement>)=>{
         e.preventDefault();
-        setRaffleID(raffleID + 1);
+		const raffleID = raffleId + 1;
         const raffle = await getRaffle({raffleCategory, raffleID});
+		setRaffleID(raffleID);
         setRaffle(raffle);
     }
 	const prevRaffle = async (e: React.MouseEvent<HTMLAnchorElement>)=>{
         e.preventDefault();
-        setRaffleID(raffleID - 1);
+        const raffleID = raffleId - 1;
         const raffle = await getRaffle({raffleCategory, raffleID});
-        setRaffle(raffle);
+		setRaffleID(raffleID);
+		setRaffle(raffle);
     }
 
 	return (
@@ -76,7 +70,7 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 				<div className="finished-rounds_header">
 					<div className="rounds">
 						<h3>
-							Round <span className="round-num">{raffleID}</span>
+							Round <span className="round-num">{raffleId}</span>
 						</h3>
 						<div className="rounds-nav">
 							<a href="/#" onClick={prevRaffle} className="prev">&#8592;</a>
@@ -84,7 +78,7 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 						</div>
 					</div>
 					<div>
-						<p>Drawn {convertTime(Number(state.currentRaffleEndTime))}</p>
+						<p>Drawn {convertTime(Number(raffle.raffleEndTime))}</p>
 					</div>
 				</div>
 				<hr style={{ opacity: 0.2, margin: 0 }} />

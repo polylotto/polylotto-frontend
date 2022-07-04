@@ -62,8 +62,8 @@ const WinningCategory: React.FC<props> = ({ estimatedPayouts, prevRounds, winner
 					{prevRounds && (
 						<p style={{ opacity: 0.6 }}>
 							Winner's Address:
-							<a href={`https://mumbai.polygonscan.com/address/${defaults[1]}`} target="_blank" rel="noopener noreferrer" className="address">
-							{defaults[1].slice(0,10)}...							</a>
+							<a href={`https://mumbai.polygonscan.com/address/${defaults[2]}`} target="_blank" rel="noopener noreferrer" className="address">
+							{defaults[2].slice(0,10)}...							</a>
 						</p>
 					)}
 				</div>

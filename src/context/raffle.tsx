@@ -31,7 +31,7 @@ interface Transaction {
 
 interface RaffleData {
     ID: number;
-    noOfTicketSold: number;
+    noOfTicketsSold: number;
     noOfPlayers: string;
     winners: string[];
     winningTickets: string[];
@@ -434,7 +434,6 @@ export function Updater() {
 
     useEffect(() => {
         if (account) {
-            console.log("hhhseh")
             return subscribe((error, log) => {
                 if(error) {
                     console.error(error);

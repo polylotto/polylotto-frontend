@@ -13,7 +13,7 @@ interface Props {}
 
 interface RaffleData {
     ID: number;
-    noOfTicketSold: number;
+    noOfTicketsSold: number;
     noOfPlayers: string;
     winners: string[];
     winningTickets: string[];
