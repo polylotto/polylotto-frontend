@@ -94,7 +94,7 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 				</div>
 				<hr style={{ opacity: 0.2, margin: 0 }} />
 				<div className="winning-numbers">
-					{status? <div className="winning-numbers_status">Latest</div> : <></>}
+					{status? <div className="winning-numbers_status">Latest&#160;</div> : <></>}
 					<div>
 						<WinningNumbers
 							winningNumber={raffle.winningTickets[0]? raffle.winningTickets[0] : "------"}
