@@ -8,6 +8,13 @@
   height: 16px;
 }
 
+.skeleton.rounds {
+  width: 50%;
+  height: 100px;
+  opacity: 0;
+  margin-bottom: 15px;
+}
+
 .skeleton.title {
   width: 150px;
   height: 18px;

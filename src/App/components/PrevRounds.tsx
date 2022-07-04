@@ -52,6 +52,9 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 	const nextRaffle = async (e: React.MouseEvent<HTMLAnchorElement>)=>{
         e.preventDefault();
 		const raffleID = raffleId + 1;
+		if(raffleID < 1){
+			return
+		}
         const raffle = await getRaffle({raffleCategory, raffleID});
 		setRaffleID(raffleID);
         setRaffle(raffle);
@@ -59,6 +62,9 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 	const prevRaffle = async (e: React.MouseEvent<HTMLAnchorElement>)=>{
         e.preventDefault();
         const raffleID = raffleId - 1;
+		if(raffleID >= _raffle.ID){
+			return;
+		}
         const raffle = await getRaffle({raffleCategory, raffleID});
 		setRaffleID(raffleID);
 		setRaffle(raffle);

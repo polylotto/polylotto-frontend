@@ -11,6 +11,7 @@ import { useWeb3Context } from "../../context/web3";
 import { useUserContext } from "../../context/user";
 import PrizePot from "./PrizePot";
 import SkeletonPrizepot from "../Skeletons/SkeletonPrizepot";
+import SkeletonPrevRounds from "../Skeletons/SkeletonPrevRounds";
 import PrevRounds from "./PrevRounds";
 
 interface TicketProps {
@@ -160,7 +161,7 @@ const TicketSection: React.FC<TicketProps> = ({
 			{fetchComplete ? (
 				<PrevRounds raffleCategory={raffleCategory} />
 			) : (
-				<SkeletonPrizepot />
+				<SkeletonPrevRounds />
 			)}
 		</>
 	);
