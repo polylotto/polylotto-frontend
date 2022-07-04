@@ -30,7 +30,7 @@ interface Transaction {
 }
 
 interface RaffleData {
-    raffleID: number;
+    ID: number;
     noOfTicketSold: number;
     noOfPlayers: string;
     winners: string[];

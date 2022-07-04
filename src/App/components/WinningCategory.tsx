@@ -9,6 +9,11 @@ interface props {
 
 // Imported In Ticket Section
 const WinningCategory: React.FC<props> = ({ estimatedPayouts, prevRounds, winnersAddress }) => {
+	const deadAddress = "0x000000000000000000000000000000000000dEaD";
+	const defaults : string[] = ["1", "2", "3"];
+	defaults[0] = winnersAddress[0]? winnersAddress[0] : deadAddress;
+	defaults[1] = winnersAddress[0]? winnersAddress[0] : deadAddress;
+	defaults[2] = winnersAddress[0]? winnersAddress[0] : deadAddress;
 	return (
 		<div>
 			<div className="winning-category">
@@ -22,8 +27,8 @@ const WinningCategory: React.FC<props> = ({ estimatedPayouts, prevRounds, winner
 					{prevRounds && (
 						<p style={{ opacity: 0.6 }}>
 							Winner's Address:
-							<a href={`https://mumbai.polygonscan.com/address/${winnersAddress[0]}`} target="_blank" rel="noopener noreferrer" className="address">
-								{winnersAddress[0].slice(0, 10)}...
+							<a href={`https://mumbai.polygonscan.com/address/${defaults[0]}`} target="_blank" rel="noopener noreferrer" className="address">
+								{defaults[0].slice(0,10)}...
 							</a>
 						</p>
 					)}
@@ -38,8 +43,8 @@ const WinningCategory: React.FC<props> = ({ estimatedPayouts, prevRounds, winner
 					{prevRounds && (
 						<p style={{ opacity: 0.6 }}>
 							Winner's Address:
-							<a href={`https://mumbai.polygonscan.com/address/${winnersAddress[1]}`} target="_blank" rel="noopener noreferrer" className="address">
-								{winnersAddress[1].slice(0, 10)}...
+							<a href={`https://mumbai.polygonscan.com/address/${defaults[1]}`} target="_blank" rel="noopener noreferrer" className="address">
+							{defaults[1].slice(0,10)}...
 							</a>
 						</p>
 					)}
@@ -57,9 +62,8 @@ const WinningCategory: React.FC<props> = ({ estimatedPayouts, prevRounds, winner
 					{prevRounds && (
 						<p style={{ opacity: 0.6 }}>
 							Winner's Address:
-							<a href={`https://mumbai.polygonscan.com/address/${winnersAddress[2]}`} target="_blank" rel="noopener noreferrer" className="address">
-								{winnersAddress[2].slice(0, 10)}...
-							</a>
+							<a href={`https://mumbai.polygonscan.com/address/${defaults[1]}`} target="_blank" rel="noopener noreferrer" className="address">
+							{defaults[1].slice(0,10)}...							</a>
 						</p>
 					)}
 				</div>

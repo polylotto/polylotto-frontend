@@ -10,7 +10,6 @@
 	color: #7df3d0;
 }
 
-<<<<<<< HEAD
 .prizepot-header img {
     width: 2rem;
     color: var(--bg-color);
@@ -21,11 +20,11 @@
     padding: 1.5rem 1rem;
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
-=======
+}
+
 .prizepot .address:hover {
 	color: #fff;
 	text-decoration: underline;
->>>>>>> 0fd3f830f41a4d5cee276760af5970851dea8b24
 }
 
 .prizepot-header {

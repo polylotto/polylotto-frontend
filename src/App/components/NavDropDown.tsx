@@ -12,7 +12,7 @@ import { useRaffleContext } from "../../context/raffle";
 interface Props {}
 
 interface RaffleData {
-    raffleID: number;
+    ID: number;
     noOfTicketSold: number;
     noOfPlayers: string;
     winners: string[];

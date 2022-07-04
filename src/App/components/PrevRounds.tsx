@@ -8,7 +8,7 @@ import { getRaffle } from "../../api/raffle";
 import { WinningNumbers } from "./WinningNumbers";
 
 interface RaffleData {
-    raffleID: number;
+    ID: number;
     noOfTicketSold: number;
     noOfPlayers: string;
     winners: string[];
@@ -33,7 +33,7 @@ interface props {
 }
 const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 	const INITIAL_STATE: RaffleData = {
-        raffleID: 0,
+        ID: 0,
         noOfTicketSold: 0,
         noOfPlayers: "",
         winners: ["0x","0x","0x"],
@@ -54,7 +54,7 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 			? 0
 			: state.raffleCategoryData[raffleCategory];
 	const raffle : RaffleData = categoryData ? categoryData.prevRaffleData : INITIAL_STATE;
-	const [raffleID, setRaffleID] = useState(raffle.raffleID);
+	const [raffleID, setRaffleID] = useState(raffle.ID);
 	const [raffleRequestData, setRaffle] = useState({});
 
 	const nextRaffle = async (e: React.MouseEvent<HTMLAnchorElement>)=>{
@@ -92,13 +92,13 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 					<div className="winning-numbers_status">Latest</div>
 					<div>
 						<WinningNumbers
-							winningNumber={raffle.winningTickets[0]}
+							winningNumber={raffle.winningTickets[0]? raffle.winningTickets[0] : "------"}
 							category={"Winning Number 1"}
 						/>
 					</div>
 					<div>
 						<WinningNumbers
-							winningNumber={raffle.winningTickets[1]}
+							winningNumber={raffle.winningTickets[1]? raffle.winningTickets[1] : "------"}
 							category={"Winning Number 2"}
 							colorScheme={[
 								"#588157",
@@ -112,7 +112,7 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 					</div>
 					<div>
 						<WinningNumbers
-							winningNumber={raffle.winningTickets[2]}
+							winningNumber={raffle.winningTickets[2]? raffle.winningTickets[2] : "------"}
 							category={"Winning Number 3"}
 							colorScheme={[
 								"#fb6107",

@@ -22,7 +22,7 @@ interface Transaction {
 }
 
 interface RaffleData {
-    raffleID: number;
+    ID: number;
     noOfTicketSold: number;
     noOfPlayers: string;
     winners: string[];
@@ -51,7 +51,7 @@ interface CountDown {
 }
 
 const init_raffle: RaffleData = {
-    raffleID: 0,
+    ID: 0,
     noOfTicketSold: 0,
     noOfPlayers: "0",
     winners: [],
@@ -130,7 +130,7 @@ export async function getRaffle(
     const RRaffle = new Promise<RaffleData>(async (resolve, reject) => {
         let p = await raffleContract.methods.getRaffle(raffleCategory, raffleID).call();
         resolve({
-            raffleID: p[0],
+            ID: p[0],
             noOfTicketSold: p[1],
             noOfPlayers: p[2],
             winners: p[3],
