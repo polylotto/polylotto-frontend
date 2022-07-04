@@ -39,6 +39,7 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 	const handleActive = () => {
 		active ? setActive(false) : setActive(true);
 	};
+	const [status, setStatus] = useState(true);
 
 	const { state } = useRaffleContext();
 	//@ts-ignore
@@ -52,8 +53,11 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 	const nextRaffle = async (e: React.MouseEvent<HTMLAnchorElement>)=>{
         e.preventDefault();
 		const raffleID = raffleId + 1;
-		if(raffleID < 1){
-			return
+		if(raffleID == _raffle.ID){
+			setStatus(true);
+		}
+		if(raffleID > _raffle.ID){
+			return;
 		}
         const raffle = await getRaffle({raffleCategory, raffleID});
 		setRaffleID(raffleID);
@@ -62,12 +66,13 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 	const prevRaffle = async (e: React.MouseEvent<HTMLAnchorElement>)=>{
         e.preventDefault();
         const raffleID = raffleId - 1;
-		if(raffleID >= _raffle.ID){
-			return;
+		if(raffleID < 1){
+			return
 		}
         const raffle = await getRaffle({raffleCategory, raffleID});
 		setRaffleID(raffleID);
 		setRaffle(raffle);
+		setStatus(false);
     }
 
 	return (
@@ -89,7 +94,7 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 				</div>
 				<hr style={{ opacity: 0.2, margin: 0 }} />
 				<div className="winning-numbers">
-					<div className="winning-numbers_status">Latest</div>
+					{status? <div className="winning-numbers_status">Latest</div> : <></>}
 					<div>
 						<WinningNumbers
 							winningNumber={raffle.winningTickets[0]? raffle.winningTickets[0] : "------"}
