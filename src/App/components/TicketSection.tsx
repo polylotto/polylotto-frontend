@@ -62,7 +62,9 @@ const TicketSection: React.FC<TicketProps> = ({
 		if (!(account && userConnected)) {
 			onClickConnect();
 		}
-		if (numTicket) {
+		if(!state.raffleOpen){
+			return;
+		}else if (numTicket) {
 			setOnShow(true);
 		}
 	}
