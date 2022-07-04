@@ -77,7 +77,7 @@ export async function getData(
         const raffle = await raffleContract.methods.getRaffle(i, raffleID).call();
         const raffleData = await raffleContract.methods.getRaffleData(i).call();
         const prevRaffleID = raffleID - 1;
-        const prevRaffleData = await raffleContract.methods.getRaffle(i, raffleID).call();
+        const prevRaffleData = await raffleContract.methods.getRaffle(i, prevRaffleID).call();
         // const ticketPrice = raffleData.ticketPrice;
         const rafflePool = raffleData.rafflePool;
         const userTicketsPerRaffle = await raffleContract.methods.viewUserTickets(i, account, raffleID).call();
