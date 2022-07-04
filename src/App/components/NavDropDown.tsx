@@ -26,9 +26,7 @@ interface RaffleData {
 interface CategoryData {
     raffleCategory: number;
     rafflePool: string;
-    currentRaffleState: string;
-    currentRaffle: RaffleData;
-    mostRecentRaffles: RaffleData[];
+    currentRaffleData: RaffleData;
     userTicketsPerRaffle: string[];
 }
 

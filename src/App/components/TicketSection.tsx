@@ -10,9 +10,8 @@ import { useRaffleContext } from "../../context/raffle";
 import {useWeb3Context} from "../../context/web3";
 import {useUserContext} from "../../context/user";
 import PrizePot from "./PrizePot";
-import Slideshow from "./Slideshow";
 import SkeletonPrizepot from "../Skeletons/SkeletonPrizepot";
-// import { OrderSummary } from "./OrderSummary2"
+import Slides from "./Slides";
 
 
 
@@ -115,8 +114,8 @@ const TicketSection: React.FC<TicketProps> = ({
                 </div> */}
             </div>
             {fetchComplete? <PrizePot raffleCategory={raffleCategory}/> : <SkeletonPrizepot />}           
-            {/* <Slideshow raffleCategory={raffleCategory}/> */}
-        </>
+            <Slides raffleCategory={raffleCategory} />
+        </> 
     );
 }
 export default TicketSection;

@@ -15,6 +15,11 @@
     align-content: center;
 }
 
+.prizepot-header img {
+    width: 2rem;
+    color: var(--bg-color);
+}
+
 .prizepot-bottom{
     background-color: #0c192c9c;
     padding: 1.5rem 1rem;

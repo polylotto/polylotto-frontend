@@ -7,7 +7,7 @@ import React, {
 } from "react";
 
 import { useWeb3Context } from "./web3";
-import { getRaffle, getCountDown, subscribe} from "../api/raffle";
+import { getData, getCountDown, subscribe} from "../api/raffle";
 import {useUserContext} from "./user";
 
 interface State {
@@ -42,9 +42,7 @@ interface RaffleData {
 interface CategoryData {
     raffleCategory: number;
     rafflePool: string;
-    currentRaffleState: string;
-    currentRaffle: RaffleData;
-    mostRecentRaffles: RaffleData[];
+    currentRaffleData: RaffleData;
     userTicketsPerRaffle: string[];
 }
 
@@ -100,6 +98,7 @@ interface AddUserTx {
     data: {
         txIndex: number;
         timestamp: number;
+        user: string;
         raffleCategory: number;
         noOfTickets: number;
         description: string;
@@ -154,7 +153,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
         }
         case ADD_USER_TX: {
             const {
-                data: { txIndex, timestamp, raffleCategory, noOfTickets, description},
+                data: { txIndex, timestamp, user, raffleCategory, noOfTickets, description},
             } = action;
 
             const userTransactions = [
@@ -182,7 +181,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
             const raffleCategoryData = [...state.raffleCategoryData]
             
             const currentRaffleUpdate = {
-                ...raffleCategoryData[Number(raffleCategory)].currentRaffle,
+                ...raffleCategoryData[Number(raffleCategory)].currentRaffleData,
                 winnersPayout: winnersPayout,
             }
             const oldUserTicketsPerRaffle = raffleCategoryData[Number(raffleCategory)].userTicketsPerRaffle;
@@ -260,6 +259,7 @@ interface SetCountDownInputs {
 interface AddUserTxInputs {
     txIndex: number;
     timestamp: number;
+    user: string;
     raffleCategory: number;
     noOfTickets: number;
     description: string;
@@ -405,7 +405,7 @@ export function Updater() {
     useEffect(() => {
         async function get(account: string) {
             try {
-                const data = await getRaffle(account);
+                const data = await getData(account);
                 set(data);
                 updateFetchStatus({fetchComplete:true})
             } catch (error){
@@ -430,6 +430,7 @@ export function Updater() {
 
     useEffect(() => {
         if (account) {
+            console.log("hhhseh")
             return subscribe((error, log) => {
                 if(error) {
                     console.error(error);
@@ -439,7 +440,9 @@ export function Updater() {
                             ticketsPurchased(log.returnValues);
                             break;
                         case "NewUserTransaction":
-                            addUserTx(log.returnValues);
+                            if(account === log.returnValues.user){
+                                addUserTx(log.returnValues);
+                            }
                             break;
                         case "RaffleOpen":
                             raffleOpen(log.returnValues);

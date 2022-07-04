@@ -25,8 +25,8 @@ const PrizePot: React.FC<props> = ({
     const categoryData = state.raffleCategoryData === []? 0 : state.raffleCategoryData[raffleCategory];
     const prizepot = categoryData? categoryData.rafflePool: 0;
     const tickets = categoryData? categoryData.userTicketsPerRaffle : [];
-    const raffleId = categoryData? categoryData.currentRaffle.raffleID : 0;
-    const estimatedWinningCategoryPayouts = categoryData? categoryData.currentRaffle.winnersPayout : [];
+    const raffleId = categoryData? categoryData.currentRaffleData.raffleID : 0;
+    const estimatedWinningCategoryPayouts = categoryData? categoryData.currentRaffleData.winnersPayout : [];
     return (
     <div className=''>
         <div className="prizepot">

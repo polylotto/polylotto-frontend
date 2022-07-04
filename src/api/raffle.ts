@@ -1,11 +1,11 @@
 import Web3 from "web3";
 import { AbiItem } from 'web3-utils';
-import Raffle from "../utils/PolyLottoRaffle.sol/PolylottoRaffle.json";
-import IERC20 from "../utils/PolyLottoRaffle.sol/IERC20.json";
+import Raffle from "../utils/contracts/PolyLottoRaffle.sol/PolylottoRaffle.json";
+import IERC20 from "../utils/contracts/PolyLottoRaffle.sol/IERC20.json";
 import { ERC20_DECIMALS } from "../utils/constants";
 import BN from "bn.js"
 
-const raffleContractAddress = "0xfA7072Dc609265b36550694720Ffa0787E85B6F9";
+const raffleContractAddress = "0x7C123730a82B2Cc466Cd9b07dc31F80B5A4627eb";
 const USDCContractAddress = "0xe75613bc32e3ec430adbd46d8ddf44c2b7f82071";
 const ercdecimal = new BN(10).pow(new BN(ERC20_DECIMALS));
 
@@ -35,9 +35,7 @@ interface RaffleData {
 interface CategoryData {
     raffleCategory: number;
     rafflePool: string;
-    currentRaffleState: string;
-    currentRaffle: RaffleData;
-    mostRecentRaffles: RaffleData[];
+    currentRaffleData: RaffleData;
     userTicketsPerRaffle: string[];
 }
 interface GetResponse {
@@ -62,7 +60,7 @@ const init_raffle: RaffleData = {
     amountInjected: "0"
 }
 
-export async function getRaffle(
+export async function getData(
     account: string
 ): Promise<GetResponse> {
     //@ts-ignore
@@ -71,46 +69,21 @@ export async function getRaffle(
     const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
     // Get current Raffle Data and Most Recent Raffle Data
     const raffleID = await raffleContract.methods.getRaffleID().call();
-    const raffleCount = Number(raffleID) + 1;
     //looping through each category
     const raffleCategoryData: CategoryData[] = [];
     for (let i = 0; i < 3; i++) {
-        const raffles: RaffleData[] = [];
-        for (let n = 1; n <= 3; n++) {
-            const ID = raffleCount - n;
-            if (ID <= 0) {
-                break;
-            }
-            const raffle = await raffleContract.methods.getRaffle(i, ID).call();
-            raffles.push({
-                raffleID: raffle.ID,
-                noOfTicketSold: raffle.noOfTicketSold,
-                noOfPlayers: raffle.noOfPlayers,
-                winners: raffle.winners,
-                winningTickets: raffle.winningTickets,
-                winnersPayout: raffle.winnersPayout,
-                raffleStartTime: raffle.raffleStartTime,
-                raffleEndTime: raffle.raffleEndTime,
-                amountInjected: raffle.amountInjected
-            });
-        }
+        const raffle = await raffleContract.methods.getRaffle(i, raffleID).call();
         const raffleData = await raffleContract.methods.getRaffleData(i).call();
-        const currentRaffleState = raffleData.raffleState
         // const ticketPrice = raffleData.ticketPrice;
         const rafflePool = raffleData.rafflePool;
         const userTicketsPerRaffle = await raffleContract.methods.viewUserTickets(i, account, raffleID).call();
         raffleCategoryData.push({
             raffleCategory: i,
             rafflePool,
-            currentRaffleState,
-            currentRaffle: raffles[0] || init_raffle,
-            mostRecentRaffles: raffles,
+            currentRaffleData: raffle || init_raffle,
             userTicketsPerRaffle
         })
     }
-    // const _raffleState = raffleCategoryData[0].currentRaffleState || undefined;
-
-    // const currentRaffleState = _raffleState ? _raffleState.toString() : "0"
 
     // Get User Transaction History
     const transactionCount = await raffleContract.methods.getUserTransactionCount(account).call();
@@ -135,6 +108,38 @@ export async function getRaffle(
         raffleCategoryData: raffleCategoryData,
         userTransactions: userTransactions,
     };
+}
+
+export async function getRaffle(
+    params: {
+        raffleCategory: number;
+        raffleID: number;
+    }
+) {
+    //@ts-ignore
+    const { ethereum } = window;
+    const web3 = new Web3(ethereum);
+    const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
+    const { raffleCategory, raffleID } = params;
+    const RRaffle = new Promise<RaffleData>(async (resolve, reject) => {
+        let p = await raffleContract.methods.getRaffle(raffleCategory, raffleID).call();
+        resolve({
+            raffleID: p[0],
+            noOfTicketSold: p[1],
+            noOfPlayers: p[2],
+            winners: p[3],
+            winningTickets: p[4],
+            winnersPayout: p[5],
+            raffleStartTime: p[6],
+            raffleEndTime: p[7],
+            amountInjected: p[8]
+        })
+    })
+
+    const raffle: RaffleData = await Promise.resolve(RRaffle);
+
+    return raffle;
+
 }
 
 export async function getCountDown(
@@ -211,20 +216,6 @@ export async function checkAllowance(
     }
 }
 
-export async function viewRollovers(
-    account: string,
-    params: {
-        raffleCategory: number;
-    }
-) {
-    //@ts-ignore
-    const { ethereum } = window;
-    const web3 = new Web3(ethereum);
-    const { raffleCategory } = params;
-    const raffleContract = new web3.eth.Contract(raffleContractABI, raffleContractAddress);
-    const rollover = await raffleContract.methods.viewUserRollovers(raffleCategory, account).call();
-    return rollover;
-}
 
 export async function recoverWrongTokens(
     account: string,
@@ -359,6 +350,7 @@ interface NewUserTransaction {
     returnValues: {
         txIndex: number;
         timestamp: number;
+        user: string;
         raffleCategory: number;
         noOfTickets: number;
         description: string;
