@@ -191,7 +191,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
             
             const categoryData = {
                 ...raffleCategoryData[Number(raffleCategory)],
-                currentRaffle: currentRaffleUpdate,
+                currentRaffleData: currentRaffleUpdate,
                 raffleCategory: Number(raffleCategory),
                 rafflePool: rafflePool,
                 userTicketsPerRaffle: [ ...oldUserTicketsPerRaffle, ...tickets]
