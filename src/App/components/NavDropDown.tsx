@@ -27,6 +27,7 @@ interface CategoryData {
     raffleCategory: number;
     rafflePool: string;
     currentRaffleData: RaffleData;
+    prevRaffleData: RaffleData;
     userTicketsPerRaffle: string[];
 }
 
@@ -39,6 +40,7 @@ interface Transaction {
 }
 
 interface SetInputs {
+    raffleID: number;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[]
 }
@@ -47,6 +49,7 @@ interface SetInputs {
 const NavDropDown: React.FC<Props> = () =>{
 
     const INITIAL_STATE: SetInputs = {
+        raffleID: 0,
         raffleCategoryData: [],
         userTransactions: []
     }

@@ -11,6 +11,7 @@ import { getData, getCountDown, subscribe} from "../api/raffle";
 import {useUserContext} from "./user";
 
 interface State {
+    raffleID: number;
     currentRaffleEndTime: string;
     currentRaffleRebootEndTime: string;
     raffleCategoryData: CategoryData[];
@@ -43,10 +44,12 @@ interface CategoryData {
     raffleCategory: number;
     rafflePool: string;
     currentRaffleData: RaffleData;
+    prevRaffleData: RaffleData;
     userTicketsPerRaffle: string[];
 }
 
 const INITIAL_STATE: State = {
+    raffleID: 0,
     currentRaffleEndTime: "0",
     currentRaffleRebootEndTime: "0",
     raffleCategoryData: [],
@@ -246,6 +249,7 @@ function reducer(state: State = INITIAL_STATE, action: Action) {
 }
 
 interface SetInputs {
+    raffleID: number;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[]
 }

@@ -36,9 +36,11 @@ interface CategoryData {
     raffleCategory: number;
     rafflePool: string;
     currentRaffleData: RaffleData;
+    prevRaffleData: RaffleData;
     userTicketsPerRaffle: string[];
 }
 interface GetResponse {
+    raffleID: number;
     raffleCategoryData: CategoryData[];
     userTransactions: Transaction[];
 }
@@ -74,6 +76,8 @@ export async function getData(
     for (let i = 0; i < 3; i++) {
         const raffle = await raffleContract.methods.getRaffle(i, raffleID).call();
         const raffleData = await raffleContract.methods.getRaffleData(i).call();
+        const prevRaffleID = raffleID - 1;
+        const prevRaffleData = await raffleContract.methods.getRaffle(i, raffleID).call();
         // const ticketPrice = raffleData.ticketPrice;
         const rafflePool = raffleData.rafflePool;
         const userTicketsPerRaffle = await raffleContract.methods.viewUserTickets(i, account, raffleID).call();
@@ -81,6 +85,7 @@ export async function getData(
             raffleCategory: i,
             rafflePool,
             currentRaffleData: raffle || init_raffle,
+            prevRaffleData: prevRaffleData || init_raffle,
             userTicketsPerRaffle
         })
     }
@@ -105,6 +110,7 @@ export async function getData(
         });
     }
     return {
+        raffleID,
         raffleCategoryData: raffleCategoryData,
         userTransactions: userTransactions,
     };

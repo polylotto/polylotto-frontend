@@ -1,20 +1,16 @@
-.prizepot{
-    width: 80%;
-    margin: 0rem auto 4rem auto;
-    background-color: var(--bg-color);
-    border-radius: 30px;
-    position: relative;
+.prizepot {
+	width: 80%;
+	margin: 0rem auto 4rem auto;
+	background-color: var(--bg-color);
+	border-radius: 30px;
+	position: relative;
 }
 
-.prizepot-header{
-    background-color: #0c192c9c;
-    padding: 1.5rem 1rem;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    display: flex;
-    align-content: center;
+.prizepot .address {
+	color: #7df3d0;
 }
 
+<<<<<<< HEAD
 .prizepot-header img {
     width: 2rem;
     color: var(--bg-color);
@@ -25,199 +21,222 @@
     padding: 1.5rem 1rem;
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
+=======
+.prizepot .address:hover {
+	color: #fff;
+	text-decoration: underline;
+>>>>>>> 0fd3f830f41a4d5cee276760af5970851dea8b24
 }
 
-.prizepot-profit, .your-tickets{
-    padding: 2rem 1.5rem;
-    display: flex;
-    align-items: center;
+.prizepot-header {
+	background-color: #0c192c9c;
+	padding: 1.5rem 1rem;
+	border-top-left-radius: 30px;
+	border-top-right-radius: 30px;
+	display: flex;
+	align-content: center;
+}
+
+.prizepot-bottom {
+	background-color: #0c192c9c;
+	padding: 1.5rem 1rem;
+	border-bottom-left-radius: 30px;
+	border-bottom-right-radius: 30px;
+}
+
+.prizepot-profit,
+.your-tickets {
+	padding: 2rem 1.5rem;
+	display: flex;
+	align-items: center;
 }
 
 .skel {
-    margin-left: 7rem;
+	margin-left: 7rem;
 }
-.prizepot-profit div, .your-tickets div{
-    margin-left: 4rem;
-}
-
-.prizepot-profit p{
-    font-size: 3rem;
-    color: var(--secondary-color-2);
-    font-weight: bold;
+.prizepot-profit div,
+.your-tickets div {
+	margin-left: 4rem;
 }
 
-.prizepot small{
-    font-size: 1.1rem;
-    font-weight: bold;
-    opacity: 0.7;
-    overflow: hidden;
+.prizepot-profit p {
+	font-size: 3rem;
+	color: var(--secondary-color-2);
+	font-weight: bold;
 }
 
-.your-tickets{
-    overflow: hidden;
+.prizepot small {
+	font-size: 1.1rem;
+	font-weight: bold;
+	opacity: 0.7;
+	overflow: hidden;
 }
 
-.your-tickets p{
-    font-size: 1.2rem;
-
+.your-tickets {
+	overflow: hidden;
 }
 
-.your-tickets a:hover{
-    text-decoration: underline;
+.your-tickets p {
+	font-size: 1.2rem;
 }
 
-.round-tickets{
-    position: absolute;
-    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.397);
-    z-index: 10;
-    background-color: #ffff;
-    color: var(--bg-color);
-    border-radius: 30px;
-    width: 50%;
-    left: 0;
-    transform: translate(50%, 5%);
+.your-tickets a:hover {
+	text-decoration: underline;
+}
+
+.round-tickets {
+	position: absolute;
+	box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.397);
+	z-index: 10;
+	background-color: #ffff;
+	color: var(--bg-color);
+	border-radius: 30px;
+	width: 50%;
+	left: 0;
+	transform: translate(50%, 5%);
 }
 
 .tickets_modal {
 	position: fixed;
-    width: 100%;
-    height: 100%;
+	width: 100%;
+	height: 100%;
 	left: 0;
 	top: 0;
 	right: 0;
 	bottom: 0;
-	background-color: rgba(0,0,0,0.5);
-    z-index: 100;
-    display: flex;
-    align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 100;
+	display: flex;
+	align-items: center;
 	justify-content: center;
 }
 
-.round-tickets p, .round-tickets small{
-    color: var(--bg-color);
+.round-tickets p,
+.round-tickets small {
+	color: var(--bg-color);
 }
-.round-tickets p:first-child{
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    opacity: 0.95;
+.round-tickets p:first-child {
+	font-size: 1.2rem;
+	margin-bottom: 1rem;
+	text-transform: uppercase;
+	font-weight: bold;
+	opacity: 0.95;
 }
-.round-tickets .content{
-    max-height: 23em;
-    padding: 1rem;
-    overflow: auto;
-}
-
-.round-tickets .btn-3{
-    width: 100%;
-    text-align: center;
-    display: block;
-    margin: 2rem 0 0 0;
+.round-tickets .content {
+	max-height: 23em;
+	padding: 1rem;
+	overflow: auto;
 }
 
-.round-tickets .prizepot-header span{
-    color: var(--main-color);
-    text-align: center;
-    font-weight: bold;
-    cursor: pointer;
-    display: block;
-    margin-right: 1rem;
-}
-.num{
-    padding: 0.7rem;
-    margin-bottom: 1rem;
-    text-align: center;
-    width: 100%;
-    background-color: rgb(211, 205, 205);
-    border-radius: 50px;
-    letter-spacing: 16px;
-    font-weight: bold;
+.round-tickets .btn-3 {
+	width: 100%;
+	text-align: center;
+	display: block;
+	margin: 2rem 0 0 0;
 }
 
-.details-btn{
-    padding: 1.5rem;
-    text-align: center;
-    position: relative;
-    margin-top: 0rem;
-    cursor: pointer;
-    
+.round-tickets .prizepot-header span {
+	color: var(--main-color);
+	text-align: center;
+	font-weight: bold;
+	cursor: pointer;
+	display: block;
+	margin-right: 1rem;
+}
+.num {
+	padding: 0.7rem;
+	margin-bottom: 1rem;
+	text-align: center;
+	width: 100%;
+	background-color: rgb(211, 205, 205);
+	border-radius: 50px;
+	letter-spacing: 16px;
+	font-weight: bold;
 }
 
-.details-btn span{
-    color: var(--main-color);
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-.details-btn::before{
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: rgba(158, 158, 158, 0.479);
-}
-.prizes{
-    overflow: hidden;
-}
-.prizes-hidden, .prizes-active{
-    background-color: #0d1625;
-    padding: 2rem;
-    transition: .25s;
-    margin-top: -150%;
-    overflow: hidden;
+.details-btn {
+	padding: 1.5rem;
+	text-align: center;
+	position: relative;
+	margin-top: 0rem;
+	cursor: pointer;
 }
 
-.prizes-active{
-    margin-top: 0;
+.details-btn span {
+	color: var(--main-color);
+	font-weight: bold;
+	letter-spacing: 2px;
+}
+.details-btn::before {
+	position: absolute;
+	content: "";
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	background-color: rgba(158, 158, 158, 0.479);
+}
+.prizes {
+	overflow: hidden;
+}
+.prizes-hidden,
+.prizes-active {
+	background-color: #0d1625;
+	padding: 2rem;
+	transition: 0.25s;
+	margin-top: -150%;
+	overflow: hidden;
 }
 
-.d-flex{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.prizes-active {
+	margin-top: 0;
 }
 
-.winning-category{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+.d-flex {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.winner-head{
-    color: var(--main-color);
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: 2rem;
+.winning-category {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
 }
 
-.winner-amount{
-    font-size: 2rem;
-    text-transform: uppercase;
-    font-weight: bold;
+.winner-head {
+	color: var(--main-color);
+	font-size: 1.2rem;
+	font-weight: bold;
+	margin-top: 2rem;
+}
+
+.winner-amount {
+	font-size: 2rem;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 
 @media (max-width: 900px) {
-    .round-tickets{
-        width: 80%;
-        left: 0%;
-        transform: translate(12%, 5%);
-    }
-    .round-tickets p:first-child{
-        font-size: 1rem;
-    }
-    .winning-category{
-        grid-template-columns: 1fr;
-    }
+	.round-tickets {
+		width: 80%;
+		left: 0%;
+		transform: translate(12%, 5%);
+	}
+	.round-tickets p:first-child {
+		font-size: 1rem;
+	}
+	.winning-category {
+		grid-template-columns: 1fr;
+	}
 
-    .prizepot{
-        width: 95%;
-    }
+	.prizepot {
+		width: 95%;
+	}
 
-    .prizepot-profit p{
-        font-size: 1.5rem;
-    }
-    .winner-amount{
-        font-size: 1.3rem;
-    }
+	.prizepot-profit p {
+		font-size: 1.5rem;
+	}
+	.winner-amount {
+		font-size: 1.3rem;
+	}
 }
