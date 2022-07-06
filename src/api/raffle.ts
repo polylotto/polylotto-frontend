@@ -31,6 +31,7 @@ interface RaffleData {
     raffleStartTime: string;
     raffleEndTime: string;
     amountInjected: string;
+    rollover: boolean;
 }
 interface CategoryData {
     raffleCategory: number;
@@ -59,7 +60,8 @@ const init_raffle: RaffleData = {
     winnersPayout: [],
     raffleStartTime: "0",
     raffleEndTime: "0",
-    amountInjected: "0"
+    amountInjected: "0",
+    rollover: false
 }
 
 export async function getData(
@@ -138,7 +140,8 @@ export async function getRaffle(
             winnersPayout: p.winnersPayout,
             raffleStartTime: p.raffleStartTime,
             raffleEndTime: p.raffleEndTime,
-            amountInjected: p.amountInjected
+            amountInjected: p.amountInjected,
+            rollover: p.rollover
         })
     })
 

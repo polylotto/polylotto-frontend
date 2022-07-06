@@ -18,6 +18,7 @@ type RaffleData = {
     raffleStartTime: string;
     raffleEndTime: string;
     amountInjected: string;
+	rollover: boolean;
 }
 
 interface props {
@@ -33,7 +34,8 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
         winnersPayout: [],
         raffleStartTime: "",
         raffleEndTime: "",
-        amountInjected: ""
+        amountInjected: "",
+		rollover: false
     }
 	const [active, setActive] = React.useState(false);
 	const handleActive = () => {
@@ -94,7 +96,7 @@ const PrevRounds: React.FC<props> = ({ raffleCategory }) => {
 				</div>
 				<hr style={{ opacity: 0.2, margin: 0 }} />
 				<div className="winning-numbers">
-					{status? <div className="winning-numbers_status">Latest&#160;</div> : <></>}
+					{status? <div className="winning-numbers_status">Latest&#160;&#160;&#160;</div> : raffle.rollover? <div className="winning-numbers_status">Rollovered&#160;</div> : <></>}
 					<div>
 						<WinningNumbers
 							winningNumber={raffle.winningTickets[0]? raffle.winningTickets[0] : "------"}

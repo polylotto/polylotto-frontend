@@ -21,6 +21,7 @@ interface RaffleData {
     raffleStartTime: string;
     raffleEndTime: string;
     amountInjected: string;
+    rollover: boolean;
 }
 
 interface CategoryData {
