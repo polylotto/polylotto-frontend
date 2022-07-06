@@ -12,8 +12,8 @@ const WinningCategory: React.FC<props> = ({ estimatedPayouts, prevRounds, winner
 	const deadAddress = "0x000000000000000000000000000000000000dEaD";
 	const defaults : string[] = ["1", "2", "3"];
 	defaults[0] = winnersAddress[0]? winnersAddress[0] : deadAddress;
-	defaults[1] = winnersAddress[1]? winnersAddress[0] : deadAddress;
-	defaults[2] = winnersAddress[2]? winnersAddress[0] : deadAddress;
+	defaults[1] = winnersAddress[1]? winnersAddress[1] : deadAddress;
+	defaults[2] = winnersAddress[2]? winnersAddress[2] : deadAddress;
 	return (
 		<div>
 			<div className="winning-category">
